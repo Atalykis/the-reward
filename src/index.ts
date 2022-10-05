@@ -1,11 +1,11 @@
-import express from 'express'
+/**
+ * This file is just a silly example to show everything working in the browser.
+ * When you're ready to start on your site, clear the file. Happy hacking!
+ **/
 
-// Create Express server
-const app = express()
+import confetti from 'canvas-confetti';
 
-const server = app.listen(8888, () => {
-  /* eslint-disable-next-line no-console */
-  console.log('App is running on port 8888')
-})
-
-export default server
+confetti.create(document.getElementById('canvas') as HTMLCanvasElement, {
+  resize: true,
+  useWorker: true,
+})({ particleCount: 200, spread: 200 });

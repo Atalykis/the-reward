@@ -1,36 +1,24 @@
-# Blank Node/Typescript Template
+# New Project
 
-A blank template for Node.js/typescript projects. It includes some basic configuration and dev tools. 
+> ✨ Bootstrapped with Create Snowpack App (CSA).
 
-- Typescript ESlint
-- Prettier
-- Husky/Lint Staged 
-- Nodemon
-- Jest
+## Available Scripts
 
-## Scripts 
+### npm start
 
-**`start`** 
+Runs the app in the development mode.
+Open http://localhost:8080 to view it in the browser.
 
-Starts the app
+The page will reload if you make edits.
+You will also see any lint errors in the console.
 
-**`start:dev`**
+### npm run build
 
-Starts the app in development mode.
+Builds a static copy of your site to the `build/` folder.
+Your app is ready to be deployed!
 
-**`watch:ts`**
+**For the best production performance:** Add a build bundler plugin like [@snowpack/plugin-webpack](https://github.com/snowpackjs/snowpack/tree/main/plugins/plugin-webpack) or [snowpack-plugin-rollup-bundle](https://github.com/ParamagicDev/snowpack-plugin-rollup-bundle) to your `snowpack.config.mjs` config file.
 
-Compiles typescript when files change
+### Q: What about Eject?
 
-
-**`watch:node`**
-
-Starts the app with nodemon
-
-**`build`**
-
-Compiles typescript and copies static assets to `dist` directory
-
-**`lint`**
-
-Runs ESLint
+No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
