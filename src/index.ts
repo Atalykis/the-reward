@@ -1,11 +1,45 @@
-/**
- * This file is just a silly example to show everything working in the browser.
- * When you're ready to start on your site, clear the file. Happy hacking!
- **/
+// import { Audio } from './audio'
+import { MenuEvents, RunEvents } from './event'
+import { Graphics } from './graphics'
+import { MainMenu } from './main-menu'
+import { Physics } from './physics'
+import { Run } from './run'
 
-import confetti from 'canvas-confetti';
+export class Game {
 
-confetti.create(document.getElementById('canvas') as HTMLCanvasElement, {
-  resize: true,
-  useWorker: true,
-})({ particleCount: 200, spread: 200 });
+  private mainMenu: MainMenu
+  public run: Run
+
+  private menuEvents: MenuEvents
+  private runEvents: RunEvents
+
+  constructor(public graphics: Graphics, private physics: Physics){
+    this.mainMenu = new MainMenu(graphics)
+    this.run = new Run(this.graphics, this.physics)
+    this.menuEvents = new MenuEvents(this.graphics, this.switchMode.bind(this))
+    this.runEvents = new RunEvents(this.run)
+    this.switchMode("Menu")
+  }
+
+  menuMode(){
+    this.mainMenu.render()
+    this.menuEvents.mount()
+  }
+
+  runMode(){
+    this.menuEvents.unmount()
+    this.run.startRun()
+    this.runEvents.mount()
+  }
+
+  switchMode(mode: string){
+    switch(mode){
+      case "Menu": this.menuMode(); break;
+      case "Run":  this.runMode(); break;
+    }
+  }
+}
+
+const physics = new Physics()
+const graphics = new Graphics(physics)
+const game = new Game(graphics, physics) 
