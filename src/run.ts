@@ -1,3 +1,4 @@
+import type { AudioMixer } from "./audio"
 import { Character } from "./character"
 import type { Graphics } from "./graphics"
 import type { Physics } from "./physics"
@@ -6,12 +7,14 @@ export class Run {
   private interval: NodeJS.Timer | undefined
   private movementIntervals: Map<string, NodeJS.Timer> = new Map()
   private character: Character = new Character()
-  constructor(private graphics: Graphics, private physics: Physics){
+  constructor(private graphics: Graphics, private physics: Physics, private audioMixer: AudioMixer){
     this.physics.setCharacter(this.character)
   }
 
   startRun(){
     this.graphics.renderRestaurant()
+    this.audioMixer.manageTablesSounds()
+    this.audioMixer.playAmbiance()
     if(!this.interval) this.interval = setInterval(() => this.loop(), 60000)
   }
 
@@ -29,22 +32,42 @@ export class Run {
 
   moveCharacterLeft(){
     if(this.movementIntervals.get("Left")) return
-    this.movementIntervals.set("Left", setInterval(() => this.physics.moveLeft(), 16))
+    this.movementIntervals.set("Left", setInterval(() => this.moveLeft(), 16))
   }
 
   moveCharacterRight(){
     if(this.movementIntervals.get("Right")) return
-    this.movementIntervals.set("Right", setInterval(() => this.physics.moveRight(), 16))
+    this.movementIntervals.set("Right", setInterval(() => this.moveRight(), 16))
   }
 
   moveCharacterUp(){
     if(this.movementIntervals.get("Up")) return
-    this.movementIntervals.set("Up", setInterval(() => this.physics.moveUp(), 16))
+    this.movementIntervals.set("Up", setInterval(() => this.moveUp(), 16))
   }
 
   moveCharacterDown(){
     if(this.movementIntervals.get("Down")) return
-    this.movementIntervals.set("Down", setInterval(() => this.physics.moveDown(), 16))
+    this.movementIntervals.set("Down", setInterval(() => this.moveDown(), 16))
+  }
+
+  moveLeft(){
+    this.physics.moveLeft()
+    this.audioMixer.manageTablesSounds()
+  }
+
+  moveRight(){
+    this.physics.moveRight()
+    this.audioMixer.manageTablesSounds()
+  }
+
+  moveUp(){
+    this.physics.moveUp()
+    this.audioMixer.manageTablesSounds()
+  }
+
+  moveDown(){
+    this.physics.moveDown()
+    this.audioMixer.manageTablesSounds()
   }
 
   stopCharacterMovement(direction: string){

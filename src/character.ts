@@ -1,12 +1,4 @@
-export interface Position {
-  x: number,
-  y: number
-}
-
-export interface Size {
-  width: number,
-  height: number
-}
+import type { Position, Size } from "./physics"
 
 export class Character {
   public position: Position = {
@@ -23,6 +15,10 @@ export class Character {
 
   move(to: Position){
     this.position = to
+  }
+
+  getCenter() : Position{
+    return {x : this.position.x + this.size.width/2, y: this.position.y + this.size.height/2}
   }
 
   resetPosition(){

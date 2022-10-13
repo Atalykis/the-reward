@@ -1,48 +1,14 @@
-import type { Character, Position, Size } from "./character"
+import type { Character } from "./character"
+import { Physical, Plants, Tables } from "./physical"
 
-const table1 = {
-  position: {
-    x: 240, y: 370
-  },
-  size: {
-    width: 250,
-    height: 130
-  }
+export interface Position {
+  x: number,
+  y: number
 }
 
-const table2 = {
-  position: {
-    x: 860, y: 370
-  },
-  size: {
-    width: 250,
-    height: 130
-  }
-}
-
-const table3 = {
-  position: {
-    x: 132, y: 630
-  },
-  size: {
-    width: 250,
-    height: 130
-  }
-}
-
-const table4 = {
-  position: {
-    x: 785, y: 640
-  },
-  size: {
-    width: 250,
-    height: 130
-  }
-}
-
-interface Table {
-  size: Size,
-  position: Position
+export interface Size {
+  width: number,
+  height: number
 }
 
 export class Physics{
@@ -50,17 +16,38 @@ export class Physics{
     width: 1200,
     height: 868
   }
-
-  private tables: Table[] = [table1, table2, table3, table4]
+  private tables = Tables
+  private plants = Plants
+  private physicals: Physical[] = [...this.tables, ...this.plants] 
   public character: Character | undefined
   constructor(){}
 
+  getDistancesXY(pos1: Position, pos2: Position){
+    return {distanceX: Math.abs(pos1.x - pos2.x), distanceY : Math.abs(pos1.y - pos2.y)}
+  }
+
+  getDistance(pos1: Position, pos2: Position){
+    const { distanceX, distanceY } = this.getDistancesXY(pos1, pos2)
+    return Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2))
+  }
+
+  characterDistanceWithTables(){
+    if(!this.character) return []
+    const associatedDistances = []
+    for(const table of this.tables){
+      const distance = this.getDistance(this.character.getCenter(), table.getCenter())
+      associatedDistances.push({ table: table.name, distance: distance})
+    }
+    return associatedDistances
+  }
+
   canMove(to: Position){
     if(!this.character) return
-    const characterCenter = { x: to.x + this.character.size.width/2 , y: to.y + this.character.size.height/2}
-    for(const table of this.tables){
-      const tableCenter = {x: table.position.x + table.size.width/2, y: table.position.y + table.size.height/2}
-      if(Math.abs(characterCenter.x - tableCenter.x) < ((table.size.width + this.character.size.width)/2) && Math.abs(characterCenter.y - tableCenter.y) < ((table.size.height + this.character.size.height)/2)) return false
+    const nextCenter = { x: to.x + this.character.size.width/2 , y: to.y + this.character.size.height/2}
+    for(const object of this.physicals){
+      const objectCenter = object.getCenter()
+      const { distanceX, distanceY } = this.getDistancesXY(nextCenter, objectCenter)
+      if(distanceX < ((object.size.width + this.character.size.width)/2) && distanceY < ((object.size.height + this.character.size.height)/2)) return false
     }
     return true
   }

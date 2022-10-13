@@ -5,37 +5,40 @@ export class RunEvents {
   private lastKeyDown : string = ""
   constructor(private run: Run){}
 
-  mount(){
+  mountKeyboard(){
     window.addEventListener("keydown",this.arrowDownEvent)
     window.addEventListener("keyup", this.arrowUpEvent)
-    // window.addEventListener("gamepadconnected", this.gamepadEvents)
+  }
+  
+  mountGamepad(){
+    window.addEventListener("gamepadconnected", this.gamepadEvents)
   }
 
-  // gamepadEvents = () => {
-  //   setInterval(() => this.checkAxes(), 16)
-  // }
+  gamepadEvents = () => {
+    setInterval(() => this.checkAxes(), 16)
+  }
 
-  // checkAxes(){
-  //   const gamepad = navigator.getGamepads()[0]
-  //   if(!gamepad) return
-  //   const axes : number[] = [gamepad.axes[6], gamepad.axes[7]]
-  //   switch(axes[0]){
-  //     case 0 : 
-  //       this.run.stopCharacterMovement("Left")
-  //       this.run.stopCharacterMovement("Right")
-  //       break;
-  //     case -1: this.run.moveCharacterLeft(); break;
-  //     case 1: this.run.moveCharacterRight(); break;
-  //   }
-  //   switch(axes[1]){
-  //     case 0 : 
-  //       this.run.stopCharacterMovement("Up")
-  //       this.run.stopCharacterMovement("Down")
-  //       break;
-  //     case -1: this.run.moveCharacterUp(); break;
-  //     case 1: this.run.moveCharacterDown(); break;
-  //   }
-  // }
+  checkAxes(){
+    const gamepad = navigator.getGamepads()[0]
+    if(!gamepad) return
+    const axes : number[] = [gamepad.axes[6], gamepad.axes[7]]
+    switch(axes[0]){
+      case 0 : 
+        this.run.stopCharacterMovement("Left")
+        this.run.stopCharacterMovement("Right")
+        break;
+      case -1: this.run.moveCharacterLeft(); break;
+      case 1: this.run.moveCharacterRight(); break;
+    }
+    switch(axes[1]){
+      case 0 : 
+        this.run.stopCharacterMovement("Up")
+        this.run.stopCharacterMovement("Down")
+        break;
+      case -1: this.run.moveCharacterUp(); break;
+      case 1: this.run.moveCharacterDown(); break;
+    }
+  }
 
   arrowDownEvent = (event: KeyboardEvent) => {
     event.preventDefault()
