@@ -50,7 +50,7 @@ export class AudioMixer {
     for(const associatedDistance of this.physics.characterDistanceWithTables()){
       const sound = this.sounds.get(associatedDistance.table)
       const distance = associatedDistance.distance
-      if(distance < 80){
+      if(distance < associatedDistance.minimalDistance){
         sound?.changeGain(0.25);
         continue 
       } 

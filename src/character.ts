@@ -11,6 +11,8 @@ export class Character {
   }
   public speed: number = 3
 
+  public holding: boolean = false
+
   constructor(){}
 
   move(to: Position){
@@ -26,5 +28,9 @@ export class Character {
       x: 726,
       y: 82
     }
+  }
+
+  reverseHolding(){
+    this.holding = !this.holding
   }
 }

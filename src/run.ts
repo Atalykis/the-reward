@@ -1,14 +1,19 @@
 import type { AudioMixer } from "./audio"
 import { Character } from "./character"
 import type { Graphics } from "./graphics"
-import type { Physics } from "./physics"
+import { PlateInteractions } from "./interaction"
+import type { Physics, Position } from "./physics"
+
+
 
 export class Run {
+  private plateInteraction: PlateInteractions 
   private interval: NodeJS.Timer | undefined
   private movementIntervals: Map<string, NodeJS.Timer> = new Map()
   private character: Character = new Character()
   constructor(private graphics: Graphics, private physics: Physics, private audioMixer: AudioMixer){
     this.physics.setCharacter(this.character)
+    this.plateInteraction = new PlateInteractions(this.graphics, this.physics, this.character)
   }
 
   startRun(){
@@ -68,6 +73,10 @@ export class Run {
   moveDown(){
     this.physics.moveDown()
     this.audioMixer.manageTablesSounds()
+  }
+
+  playPlateInteraction(){
+    this.plateInteraction.play()
   }
 
   stopCharacterMovement(direction: string){

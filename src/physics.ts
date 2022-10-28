@@ -23,12 +23,18 @@ export class Physics{
   constructor(){}
 
   getDistancesXY(pos1: Position, pos2: Position){
-    return {distanceX: Math.abs(pos1.x - pos2.x), distanceY : Math.abs(pos1.y - pos2.y)}
+    return {distanceX: pos1.x - pos2.x, distanceY : pos1.y - pos2.y}
   }
 
   getDistance(pos1: Position, pos2: Position){
     const { distanceX, distanceY } = this.getDistancesXY(pos1, pos2)
-    return Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2))
+    return Math.sqrt(Math.pow(Math.abs(distanceX), 2) + Math.pow(Math.abs(distanceY), 2))
+  }
+
+  getMinimalDistance(physical: Physical, character: Character){
+    const distY = physical.size.height/2 + character.size.height/2
+    const distX = physical.size.width/2 + character.size.width/2
+    return Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2))
   }
 
   characterDistanceWithTables(){
@@ -36,7 +42,8 @@ export class Physics{
     const associatedDistances = []
     for(const table of this.tables){
       const distance = this.getDistance(this.character.getCenter(), table.getCenter())
-      associatedDistances.push({ table: table.name, distance: distance})
+      const minimalDistance = this.getMinimalDistance(table, this.character)
+      associatedDistances.push({ table: table.name, distance: distance, minimalDistance: minimalDistance})
     }
     return associatedDistances
   }
@@ -47,7 +54,7 @@ export class Physics{
     for(const object of this.physicals){
       const objectCenter = object.getCenter()
       const { distanceX, distanceY } = this.getDistancesXY(nextCenter, objectCenter)
-      if(distanceX < ((object.size.width + this.character.size.width)/2) && distanceY < ((object.size.height + this.character.size.height)/2)) return false
+      if(Math.abs(distanceX) < ((object.size.width + this.character.size.width)/2) && Math.abs(distanceY) < ((object.size.height + this.character.size.height)/2)) return false
     }
     return true
   }

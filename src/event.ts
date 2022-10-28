@@ -6,8 +6,8 @@ export class RunEvents {
   constructor(private run: Run){}
 
   mountKeyboard(){
-    window.addEventListener("keydown",this.arrowDownEvent)
-    window.addEventListener("keyup", this.arrowUpEvent)
+    window.addEventListener("keydown",this.keyDownEvent)
+    window.addEventListener("keyup", this.keyUpEvent)
   }
   
   mountGamepad(){
@@ -40,9 +40,10 @@ export class RunEvents {
     }
   }
 
-  arrowDownEvent = (event: KeyboardEvent) => {
+  keyDownEvent = (event: KeyboardEvent) => {
     event.preventDefault()
     if(this.lastKeyDown === event.key) return
+    console.log(event.key)
     switch (event.key){
       case "ArrowRight": this.run.moveCharacterRight(); break;
       case "ArrowLeft": this.run.moveCharacterLeft(); break;
@@ -52,20 +53,21 @@ export class RunEvents {
     this.lastKeyDown = event.key
   }
 
-  arrowUpEvent = (event: KeyboardEvent) => {
+  keyUpEvent = (event: KeyboardEvent) => {
     event.preventDefault()
     switch (event.key){
       case "ArrowRight": this.run.stopCharacterMovement("Right"); break;
       case "ArrowLeft": this.run.stopCharacterMovement("Left"); break;
       case "ArrowUp": this.run.stopCharacterMovement("Up"); break;
       case "ArrowDown": this.run.stopCharacterMovement("Down"); break;
+      case " ": this.run.playPlateInteraction(); break;
     }
     this.lastKeyDown = ""
   }
 
   unmount(){
-    window.removeEventListener("keydown",this.arrowDownEvent)
-    window.removeEventListener("keyup", this.arrowUpEvent)
+    window.removeEventListener("keydown",this.keyDownEvent)
+    window.removeEventListener("keyup", this.keyUpEvent)
   }
 }
 
