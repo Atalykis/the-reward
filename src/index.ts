@@ -32,7 +32,8 @@ export class Game {
   runMode(){
     this.menuEvents.unmount()
     this.run.startRun()
-    this.runEvents.mountKeyboard()
+    // this.runEvents.mountKeyboard()
+    this.runEvents.mountGamepad()
   }
 
   switchMode(mode: string){

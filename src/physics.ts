@@ -13,8 +13,8 @@ export interface Size {
 
 export class Physics{
   private readonly stageSize: Size = {
-    width: 1200,
-    height: 868
+    width: 1920,
+    height: 1080
   }
   private tables = Tables
   private plants = Plants
@@ -54,7 +54,7 @@ export class Physics{
     for(const object of this.physicals){
       const objectCenter = object.getCenter()
       const { distanceX, distanceY } = this.getDistancesXY(nextCenter, objectCenter)
-      if(Math.abs(distanceX) < ((object.size.width + this.character.size.width)/2) && Math.abs(distanceY) < ((object.size.height + this.character.size.height)/2)) return false
+      if(Math.abs(distanceX) < ((object.size.width + this.character.size.width)/2) && Math.abs(distanceY) < ((object.size.height + this.character.size.height)/3)) return false
     }
     return true
   }
@@ -62,7 +62,7 @@ export class Physics{
   moveRight(){
     if(!this.character) return
     const next = {x: this.character.position.x + this.character.speed, y: this.character.position.y}
-    if(next.x + this.character.size.width > this.stageSize.width) return
+    if(next.x + this.character.size.width + 50 > this.stageSize.width) return
     if(!this.canMove(next)) return
     this.character.move(next)
   }
@@ -70,7 +70,7 @@ export class Physics{
   moveLeft(){
     if(!this.character) return
     const next = {x: this.character.position.x - this.character.speed, y: this.character.position.y}
-    if(next.x < 0) return
+    if(next.x < -50) return
     if(!this.canMove(next)) return
     this.character.move(next)
   }
@@ -86,14 +86,16 @@ export class Physics{
   moveUp(){
     if(!this.character) return
     const next = {x: this.character.position.x , y: this.character.position.y - this.character.speed}
-    if(next.y < 80) return
+    if(next.y < -10) return
     if(!this.canMove(next)) return
     this.character.move(next)
+    console.log(this.character.position)
   }
 
   resetCharacterPosition(){
     if(!this.character) return
     this.character.resetPosition()
+    this.character.holding = false
   }
 
   setCharacter(character: Character){

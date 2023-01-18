@@ -2,16 +2,18 @@ import type { Position, Size } from "./physics"
 
 export class Character {
   public position: Position = {
-    x: 726,
-    y: 82
+    x: 1170,
+    y: 50
   }
   public size: Size = {
-    width: 45,
-    height: 60
+    width: 100,
+    height: 200
   }
   public speed: number = 3
 
   public holding: boolean = false
+
+  public moving: boolean = true
 
   constructor(){}
 
@@ -20,13 +22,13 @@ export class Character {
   }
 
   getCenter() : Position{
-    return {x : this.position.x + this.size.width/2, y: this.position.y + this.size.height/2}
+    return {x : this.position.x + this.size.width, y: this.position.y + this.size.height/2}
   }
 
   resetPosition(){
     this.position = {
-      x: 726,
-      y: 82
+      x: 1170,
+      y: 50
     }
   }
 

@@ -3,6 +3,7 @@ import type { Run } from "./run"
 
 export class RunEvents {
   private lastKeyDown : string = ""
+  private previousInput: number[] = []
   constructor(private run: Run){}
 
   mountKeyboard(){
@@ -18,32 +19,35 @@ export class RunEvents {
     setInterval(() => this.checkAxes(), 16)
   }
 
-  checkAxes(){
-    const gamepad = navigator.getGamepads()[0]
+  checkAxes() {
+    const gamepad = navigator.getGamepads()[1]
     if(!gamepad) return
-    const axes : number[] = [gamepad.axes[6], gamepad.axes[7]]
+    const axes : number[] = [gamepad.axes[0], gamepad.axes[1]]
+    console.log(axes, this.previousInput)
+    if(axes === this.previousInput) return
     switch(axes[0]){
       case 0 : 
-        this.run.stopCharacterMovement("Left")
-        this.run.stopCharacterMovement("Right")
+        this.run.stopCharacterMovement("right")
+        this.run.stopCharacterMovement("left")
         break;
       case -1: this.run.moveCharacterLeft(); break;
       case 1: this.run.moveCharacterRight(); break;
     }
     switch(axes[1]){
       case 0 : 
-        this.run.stopCharacterMovement("Up")
-        this.run.stopCharacterMovement("Down")
+        this.run.stopCharacterMovement("up")
+        this.run.stopCharacterMovement("down")
         break;
       case -1: this.run.moveCharacterUp(); break;
       case 1: this.run.moveCharacterDown(); break;
     }
+    this.previousInput = axes
   }
 
   keyDownEvent = (event: KeyboardEvent) => {
     event.preventDefault()
     if(this.lastKeyDown === event.key) return
-    console.log(event.key)
+    if(this.lastKeyDown !== "") return
     switch (event.key){
       case "ArrowRight": this.run.moveCharacterRight(); break;
       case "ArrowLeft": this.run.moveCharacterLeft(); break;
@@ -56,10 +60,10 @@ export class RunEvents {
   keyUpEvent = (event: KeyboardEvent) => {
     event.preventDefault()
     switch (event.key){
-      case "ArrowRight": this.run.stopCharacterMovement("Right"); break;
-      case "ArrowLeft": this.run.stopCharacterMovement("Left"); break;
-      case "ArrowUp": this.run.stopCharacterMovement("Up"); break;
-      case "ArrowDown": this.run.stopCharacterMovement("Down"); break;
+      case "ArrowRight": this.run.stopCharacterMovement("right"); break;
+      case "ArrowLeft": this.run.stopCharacterMovement("left "); break;
+      case "ArrowUp": this.run.stopCharacterMovement("up"); break;
+      case "ArrowDown": this.run.stopCharacterMovement("down"); break;
       case " ": this.run.playPlateInteraction(); break;
     }
     this.lastKeyDown = ""

@@ -10,6 +10,7 @@ export class Run {
   private plateInteraction: PlateInteractions 
   private interval: NodeJS.Timer | undefined
   private movementIntervals: Map<string, NodeJS.Timer> = new Map()
+  private movementInterval: NodeJS.Timer | undefined
   private character: Character = new Character()
   constructor(private graphics: Graphics, private physics: Physics, private audioMixer: AudioMixer){
     this.physics.setCharacter(this.character)
@@ -28,6 +29,7 @@ export class Run {
     for(const interval of this.movementIntervals.values()){
       clearInterval(interval)
     }
+    this.plateInteraction.reset()
     this.physics.resetCharacterPosition()
   }
 
@@ -36,23 +38,31 @@ export class Run {
   }
 
   moveCharacterLeft(){
-    if(this.movementIntervals.get("Left")) return
-    this.movementIntervals.set("Left", setInterval(() => this.moveLeft(), 16))
+    if(this.movementIntervals.get("left")) return
+    this.movementIntervals.set("left", setInterval(() => this.moveLeft(), 16))
+    // this.movementInterval = setInterval(() => this.moveLeft(), 16)
+    this.graphics.renderMovementAnimation("left")
   }
 
   moveCharacterRight(){
-    if(this.movementIntervals.get("Right")) return
-    this.movementIntervals.set("Right", setInterval(() => this.moveRight(), 16))
+    if(this.movementIntervals.get("right")) return
+    this.movementIntervals.set("right", setInterval(() => this.moveRight(), 16))
+    // this.movementInterval = setInterval(() => this.moveRight(), 16)
+    this.graphics.renderMovementAnimation("right")
   }
 
   moveCharacterUp(){
-    if(this.movementIntervals.get("Up")) return
-    this.movementIntervals.set("Up", setInterval(() => this.moveUp(), 16))
+    if(this.movementIntervals.get("up")) return
+    this.movementIntervals.set("up", setInterval(() => this.moveUp(), 16))
+    // this.movementInterval = setInterval(() => this.moveUp(), 16)
+    this.graphics.renderMovementAnimation("up")
   }
 
   moveCharacterDown(){
-    if(this.movementIntervals.get("Down")) return
-    this.movementIntervals.set("Down", setInterval(() => this.moveDown(), 16))
+    if(this.movementIntervals.get("down")) return
+    this.movementIntervals.set("down", setInterval(() => this.moveDown(), 16))
+    // this.movementInterval = setInterval(() => this.moveDown(), 16)
+    this.graphics.renderMovementAnimation("down")
   }
 
   moveLeft(){
@@ -83,5 +93,11 @@ export class Run {
     const interval = this.movementIntervals.get(direction)
     clearInterval(interval)
     this.movementIntervals.delete(direction)
+    this.graphics.stopAnimation(direction)
   }
+
+  // stopCharacterMovement(){
+  //   clearInterval(this.movementInterval)
+  //   this.graphics.stopAnimation()
+  // }
 }
