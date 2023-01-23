@@ -57,3 +57,12 @@ declare module '*.png' {
 }
 
 /* CUSTOM: ADD YOUR OWN HERE */
+
+interface Movement {
+  x: number;
+  y: number;
+}
+
+interface Action {
+  triggered: boolean;
+}

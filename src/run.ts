@@ -1,103 +1,129 @@
-import type { AudioMixer } from "./audio"
-import { Character } from "./character"
-import type { Graphics } from "./graphics"
-import { PlateInteractions } from "./interaction"
-import type { Physics, Position } from "./physics"
-
-
+import { AudioMixer } from './audio';
+import { Character } from './character';
+import type { Graphics } from './graphics';
+import { PlateInteractions } from './interaction';
+import type { Physics, Position } from './physics';
 
 export class Run {
-  private plateInteraction: PlateInteractions 
-  private interval: NodeJS.Timer | undefined
-  private movementIntervals: Map<string, NodeJS.Timer> = new Map()
-  private movementInterval: NodeJS.Timer | undefined
-  private character: Character = new Character()
-  constructor(private graphics: Graphics, private physics: Physics, private audioMixer: AudioMixer){
-    this.physics.setCharacter(this.character)
-    this.plateInteraction = new PlateInteractions(this.graphics, this.physics, this.character)
+  private plateInteraction: PlateInteractions;
+  private interval: NodeJS.Timer | undefined;
+  private movementIntervals: Map<string, NodeJS.Timer> = new Map();
+  private character: Character = new Character();
+  private audioMixer: AudioMixer;
+  constructor(private graphics: Graphics, private physics: Physics) {
+    this.audioMixer = new AudioMixer(this.physics);
+    this.physics.setCharacter(this.character);
+    this.plateInteraction = new PlateInteractions(
+      this.graphics,
+      this.physics,
+      this.character,
+    );
   }
 
-  startRun(){
-    this.graphics.renderRestaurant()
-    this.audioMixer.manageTablesSounds()
-    this.audioMixer.playAmbiance()
-    if(!this.interval) this.interval = setInterval(() => this.loop(), 60000)
+  startRun() {
+    if (!this.interval) this.interval = setInterval(() => this.loop(), 75000);
+    this.loop();
   }
 
-  loop(){
-    this.graphics.renderRestaurant()
-    for(const interval of this.movementIntervals.values()){
-      clearInterval(interval)
+  loop() {
+    this.audioMixer = new AudioMixer(this.physics);
+    this.graphics.renderRestaurant();
+    this.stopAllCharacterMovement();
+    this.plateInteraction.reset();
+    this.physics.resetCharacterPosition();
+    setTimeout(() => this.initAudio(), 3000);
+    setTimeout(() => this.gameOver(), 65000);
+  }
+
+  gameOver() {
+    this.audioMixer.stopAllAmbiant();
+    this.graphics.renderGameOver();
+    this.audioMixer.playGameOverSound('high');
+  }
+
+  initAudio() {
+    this.audioMixer.manageTablesSounds();
+    this.audioMixer.playAmbiance();
+  }
+
+  clearLoop() {
+    clearInterval(this.interval);
+  }
+
+  moveCharacterLeft() {
+    if (this.movementIntervals.get('left')) return;
+    this.movementIntervals.set(
+      'left',
+      setInterval(() => this.moveLeft(), 16),
+    );
+    this.graphics.renderMovementAnimation('left');
+  }
+
+  moveCharacterRight() {
+    if (this.movementIntervals.get('right')) return;
+    this.movementIntervals.set(
+      'right',
+      setInterval(() => this.moveRight(), 16),
+    );
+    this.graphics.renderMovementAnimation('right');
+  }
+
+  moveCharacterUp() {
+    if (this.movementIntervals.get('up')) return;
+    this.movementIntervals.set(
+      'up',
+      setInterval(() => this.moveUp(), 16),
+    );
+    this.graphics.renderMovementAnimation('up');
+  }
+
+  moveCharacterDown() {
+    if (this.movementIntervals.get('down')) return;
+    this.movementIntervals.set(
+      'down',
+      setInterval(() => this.moveDown(), 16),
+    );
+    this.graphics.renderMovementAnimation('down');
+  }
+
+  moveLeft() {
+    this.physics.moveLeft();
+    this.audioMixer.manageTablesSounds();
+    this.audioMixer.manageBossSentence();
+  }
+
+  moveRight() {
+    this.physics.moveRight();
+    this.audioMixer.manageBossSentence();
+    this.audioMixer.manageTablesSounds();
+  }
+
+  moveUp() {
+    this.physics.moveUp();
+    this.audioMixer.manageBossSentence();
+    this.audioMixer.manageTablesSounds();
+  }
+
+  moveDown() {
+    this.physics.moveDown();
+    this.audioMixer.manageBossSentence();
+    this.audioMixer.manageTablesSounds();
+  }
+
+  playPlateInteraction() {
+    this.plateInteraction.play();
+  }
+
+  stopCharacterMovement(direction: string) {
+    const interval = this.movementIntervals.get(direction);
+    clearInterval(interval);
+    this.movementIntervals.delete(direction);
+    this.graphics.stopAnimation(direction);
+  }
+
+  stopAllCharacterMovement() {
+    for (const interval of this.movementIntervals.values()) {
+      clearInterval(interval);
     }
-    this.plateInteraction.reset()
-    this.physics.resetCharacterPosition()
   }
-
-  clearLoop(){
-    clearInterval(this.interval)
-  }
-
-  moveCharacterLeft(){
-    if(this.movementIntervals.get("left")) return
-    this.movementIntervals.set("left", setInterval(() => this.moveLeft(), 16))
-    // this.movementInterval = setInterval(() => this.moveLeft(), 16)
-    this.graphics.renderMovementAnimation("left")
-  }
-
-  moveCharacterRight(){
-    if(this.movementIntervals.get("right")) return
-    this.movementIntervals.set("right", setInterval(() => this.moveRight(), 16))
-    // this.movementInterval = setInterval(() => this.moveRight(), 16)
-    this.graphics.renderMovementAnimation("right")
-  }
-
-  moveCharacterUp(){
-    if(this.movementIntervals.get("up")) return
-    this.movementIntervals.set("up", setInterval(() => this.moveUp(), 16))
-    // this.movementInterval = setInterval(() => this.moveUp(), 16)
-    this.graphics.renderMovementAnimation("up")
-  }
-
-  moveCharacterDown(){
-    if(this.movementIntervals.get("down")) return
-    this.movementIntervals.set("down", setInterval(() => this.moveDown(), 16))
-    // this.movementInterval = setInterval(() => this.moveDown(), 16)
-    this.graphics.renderMovementAnimation("down")
-  }
-
-  moveLeft(){
-    this.physics.moveLeft()
-    this.audioMixer.manageTablesSounds()
-  }
-
-  moveRight(){
-    this.physics.moveRight()
-    this.audioMixer.manageTablesSounds()
-  }
-
-  moveUp(){
-    this.physics.moveUp()
-    this.audioMixer.manageTablesSounds()
-  }
-
-  moveDown(){
-    this.physics.moveDown()
-    this.audioMixer.manageTablesSounds()
-  }
-
-  playPlateInteraction(){
-    this.plateInteraction.play()
-  }
-
-  stopCharacterMovement(direction: string){
-    const interval = this.movementIntervals.get(direction)
-    clearInterval(interval)
-    this.movementIntervals.delete(direction)
-    this.graphics.stopAnimation(direction)
-  }
-
-  // stopCharacterMovement(){
-  //   clearInterval(this.movementInterval)
-  //   this.graphics.stopAnimation()
-  // }
 }
