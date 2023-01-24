@@ -4,12 +4,7 @@ import type { Layer } from 'konva/lib/Layer';
 import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from './physics';
 import { Plates } from './physical';
-import type { Group } from 'konva/lib/Group';
-import {
-  GameOverAnimation,
-  MainMenuAnimation,
-  MovementAnimation,
-} from './animations';
+import { BasicAnimation, MovementAnimation } from './animations';
 
 const mainMenuPng = new Image(1920, 1080);
 mainMenuPng.src = 'main-menu/0.png';
@@ -20,8 +15,11 @@ gameOverPng.src = 'game-over/0.png';
 const restaurantPng = new Image(1920, 1080);
 restaurantPng.src = 'restaurant.png';
 
-const tablesPng = new Image(1920, 1080);
-tablesPng.src = 'tables.png';
+const topTablesPng = new Image(1920, 1080);
+topTablesPng.src = 'top-tables.png';
+
+const bottomTablesPng = new Image(1920, 1080);
+bottomTablesPng.src = 'bottom-tables.png';
 
 const characterPng = new Image(200, 220);
 characterPng.src = '/waiter/stopped/front.png';
@@ -42,9 +40,19 @@ export class Graphics {
     height: 1080,
   });
 
-  private layer: Layer = new Konva.Layer();
+  private mainMenuLayer: Layer = new Konva.Layer();
 
-  private furnitures: Group = new Konva.Group();
+  private backgroundLayer: Layer = new Konva.Layer();
+
+  private characterLayer: Layer = new Konva.Layer();
+
+  private topTablesLayer: Layer = new Konva.Layer();
+
+  private bottomTablesLayer: Layer = new Konva.Layer();
+
+  private bottomPlantsLayer: Layer = new Konva.Layer();
+
+  private gameOverLayer: Layer = new Konva.Layer();
 
   private restaurant: KonvaImage = new Konva.Image({
     x: 0,
@@ -54,10 +62,18 @@ export class Graphics {
     height: 1080,
   });
 
-  private tables: KonvaImage = new Konva.Image({
+  private topTables: KonvaImage = new Konva.Image({
     x: 0,
     y: 0,
-    image: tablesPng,
+    image: topTablesPng,
+    widht: 1920,
+    height: 1080,
+  });
+
+  private bottomTables: KonvaImage = new Konva.Image({
+    x: 0,
+    y: 0,
+    image: bottomTablesPng,
     widht: 1920,
     height: 1080,
   });
@@ -108,9 +124,17 @@ export class Graphics {
 
   private movementAnimation = new MovementAnimation(characterPng);
 
-  private gameOverAnimation = new GameOverAnimation(gameOverPng);
+  private gameOverAnimation = new BasicAnimation(
+    'game-over/',
+    gameOverPng,
+    200,
+  );
 
-  private mainMenuAnimation = new MainMenuAnimation(mainMenuPng);
+  private mainMenuAnimation = new BasicAnimation(
+    'main-menu/',
+    mainMenuPng,
+    300,
+  );
 
   constructor(private physics: Physics) {}
 
@@ -127,36 +151,67 @@ export class Graphics {
     }
   }
 
-  setFurnitures() {
-    this.furnitures.add(this.tables);
-    this.furnitures.add(this.leftPlant);
-    this.furnitures.add(this.rightPlant);
+  setTopLayer() {
+    this.topTablesLayer.add(this.topTables);
+  }
+
+  setBottomTablesLayer() {
+    this.bottomTablesLayer.add(this.bottomTables);
+  }
+
+  setBottomPlantsLayer() {
+    this.bottomPlantsLayer.add(this.leftPlant);
+    this.bottomPlantsLayer.add(this.rightPlant);
+  }
+
+  setBackgroundLayer() {
+    this.backgroundLayer.add(this.restaurant);
+    this.backgroundLayer.add(this.plates[1]);
+  }
+
+  setCharacterLayer() {
+    this.characterLayer.add(this.character);
+  }
+
+  setAssetsLayers() {
+    this.setPlates();
+    this.setBackgroundLayer();
+    this.setTopLayer();
+    this.setCharacterLayer();
+    this.setBottomTablesLayer();
+    this.setBottomPlantsLayer();
   }
 
   renderMainMenu() {
     this.clear();
-    this.layer.add(this.mainMenu);
-    this.layer.draw();
+    this.mainMenuLayer.add(this.mainMenu);
+    this.stage.add(this.mainMenuLayer);
+    this.mainMenuLayer.draw();
     this.mainMenuAnimation.play();
-  }
-
-  renderRestaurant() {
-    this.clear();
-    this.setPlates();
-    this.layer.add(this.restaurant);
-    this.layer.add(this.plates[1]);
-    this.layer.add(this.character);
-    this.setFurnitures();
-    this.layer.add(this.furnitures);
-    this.renderCharacterMovement();
-    this.layer.draw();
   }
 
   renderGameOver() {
     this.clear();
-    this.layer.add(this.gameOver);
-    this.layer.draw();
+    this.gameOverLayer.add(this.gameOver);
+    this.stage.add(this.gameOverLayer);
+    this.gameOverLayer.draw();
     this.gameOverAnimation.play();
+  }
+
+  renderRestaurant() {
+    this.clear();
+    this.setAssetsLayers();
+    this.renderCharacterMovement();
+    this.stage.add(this.backgroundLayer);
+    this.stage.add(this.topTablesLayer);
+    this.stage.add(this.characterLayer);
+    this.stage.add(this.bottomTablesLayer);
+    this.stage.add(this.bottomPlantsLayer);
+    this.backgroundLayer.draw();
+    this.topTablesLayer.draw();
+    this.characterLayer.draw();
+    this.bottomTablesLayer.draw();
+    this.bottomPlantsLayer.draw();
   }
 
   renderCharacterMovement() {
@@ -173,47 +228,65 @@ export class Graphics {
 
   moveCharacter() {
     if (!this.physics.character) return;
-    this.autoSetCharacterIndex();
     this.character.setAttrs(this.physics.character.position);
+    this.setIndexes();
   }
 
-  autoSetCharacterIndex() {
-    if (!this.physics.character) return;
-    const characterBelowTable =
-      (this.physics.character.position.y < 530 &&
-        this.physics.character.position.y > 300) ||
-      (this.physics.character.position.y < 1000 &&
-        this.physics.character.position.y > 670 &&
-        this.physics.character.position.x > 60 &&
-        this.physics.character.position.x < 1650);
-    if (characterBelowTable) {
-      this.character.setZIndex(3);
-    } else {
-      this.character.setZIndex(2);
+  setIndexes() {
+    if (this.physics.isCharacterAboveTopTables()) {
+      this.characterLayer.setZIndex(1);
+      this.topTablesLayer.setZIndex(2);
+      this.bottomTablesLayer.setZIndex(3);
+    }
+    if (this.physics.isCharacterBellowBottomTables()) {
+      this.characterLayer.setZIndex(3);
+      this.topTablesLayer.setZIndex(1);
+      this.bottomTablesLayer.setZIndex(2);
+    }
+    if (
+      !this.physics.isCharacterAboveTopTables() &&
+      !this.physics.isCharacterBellowBottomTables()
+    ) {
+      this.characterLayer.setZIndex(2);
+      this.topTablesLayer.setZIndex(1);
+      this.bottomTablesLayer.setZIndex(3);
     }
   }
 
   renderPlate(index: number) {
-    this.layer.add(this.plates[index]);
-    this.plates[index].setZIndex(1);
+    this.backgroundLayer.add(this.plates[index]);
+    this.plates[index].moveToTop();
   }
 
   hidePlate(index: number) {
-    this.plates[index].hide();
+    this.plates[index].remove();
   }
 
   showPlateOnTable(index: number, table: Position) {
+    if (index < 3) {
+      this.topTablesLayer.add(this.plates[index]);
+    }
+    if (index >= 3) {
+      this.bottomTablesLayer.add(this.plates[index]);
+    }
     this.plates[index].setAttrs(table);
-    this.plates[index].setZIndex(3 + index);
     this.plates[index].show();
   }
 
+  resetLayers() {
+    this.backgroundLayer.removeChildren();
+    this.characterLayer.removeChildren();
+    this.topTablesLayer.removeChildren();
+    this.bottomTablesLayer.removeChildren();
+    this.bottomPlantsLayer.removeChildren();
+    this.gameOverLayer.removeChildren();
+    this.mainMenuLayer.removeChildren();
+  }
+
   clear() {
-    this.layer.removeChildren();
-    this.stage.destroyChildren();
+    this.resetLayers();
+    this.stage.removeChildren();
     this.plates = [];
     clearInterval(this.interval);
-    this.layer = new Konva.Layer();
-    this.stage.add(this.layer);
   }
 }

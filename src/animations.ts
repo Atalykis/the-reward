@@ -62,52 +62,29 @@ export class MovementAnimation {
   // }
 }
 
-export class GameOverAnimation {
+export class BasicAnimation {
   private animationInterval: NodeJS.Timer | undefined;
   private currentFrame: string = '0';
 
-  constructor(private gameOver: HTMLImageElement) {}
+  constructor(
+    private folder: string,
+    private png: HTMLImageElement,
+    private period: number,
+  ) {}
 
   nextFrame() {
     if (this.currentFrame === '0') {
       this.currentFrame = '1';
-      this.gameOver.src = '/game-over/1.png';
+      this.png.src = this.folder + '1.png';
     } else {
       this.currentFrame = '0';
-      this.gameOver.src = '/game-over/0.png';
+      this.png.src = this.folder + '0.png';
     }
   }
 
   play() {
     if (this.animationInterval) return;
-    this.animationInterval = setInterval(() => this.nextFrame(), 200);
-  }
-
-  stop() {
-    clearInterval(this.animationInterval);
-    this.animationInterval = undefined;
-  }
-}
-
-export class MainMenuAnimation {
-  private animationInterval: NodeJS.Timer | undefined;
-  private currentFrame: string = '0';
-
-  constructor(private mainMenu: HTMLImageElement) {}
-
-  nextFrame() {
-    if (this.currentFrame === '0') {
-      this.currentFrame = '1';
-      this.mainMenu.src = '/main-menu/1.png';
-    } else {
-      this.currentFrame = '0';
-      this.mainMenu.src = '/main-menu/0.png';
-    }
-  }
-
-  play() {
-    if (this.animationInterval) return;
-    this.animationInterval = setInterval(() => this.nextFrame(), 300);
+    this.animationInterval = setInterval(() => this.nextFrame(), this.period);
   }
 
   stop() {

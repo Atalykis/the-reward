@@ -56,14 +56,14 @@ export class AudioMixer {
 
   async initSounds() {
     this.createSoundFromSrc(
-      'sounds/tables/4-peoples.mp3',
+      'sounds/tables/2-peoples.mp3',
       'table1',
       this.sounds,
     );
     // this.createSoundFromSrc('piano.mp3', 'table2', this.sounds);
     this.createSoundFromSrc(
-      'sounds/tables/2-peoples.mp3',
-      'table3',
+      'sounds/tables/4-peoples.mp3',
+      'table4',
       this.sounds,
     );
     // this.createSoundFromSrc('batterie.mp3', 'table4', this.sounds);
@@ -83,6 +83,7 @@ export class AudioMixer {
   playGameOverSound(level: string) {
     const sound = this.gameOverSounds.get(level);
     if (!sound) return;
+    sound.changeGain(0.5);
     sound.play();
   }
 

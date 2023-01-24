@@ -148,4 +148,16 @@ export class Physics {
   setCharacter(character: Character) {
     this.character = character;
   }
+
+  isCharacterAboveTopTables() {
+    if (!this.character) return false;
+    if (this.character.position.y < 288) return true;
+    return false;
+  }
+
+  isCharacterBellowBottomTables() {
+    if (!this.character) return false;
+    if (this.character.position.y > 790) return true;
+    return false;
+  }
 }

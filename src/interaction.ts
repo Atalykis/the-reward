@@ -38,9 +38,9 @@ export class PlateInteractions {
       this.character.getCenter(),
       this.plates[index].destination,
     );
-    console.log(distanceX, distanceY);
     if (distanceX > 100 || distanceX < 0) return;
-    if (distanceY < -100 || distanceY > -50) return;
+    if (distanceY < -100 || distanceY > 50) return;
+
     this.graphics.showPlateOnTable(index, this.plates[index].destination);
     this.character.reverseHolding();
     this.newPlate();
