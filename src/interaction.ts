@@ -59,3 +59,43 @@ export class PlateInteractions {
     this.serving = 1;
   }
 }
+
+export class CleaningInteraction {
+  private interactable: boolean = false;
+  private timeout: NodeJS.Timeout | undefined;
+  constructor(
+    private graphics: Graphics,
+    private physics: Physics,
+    private character: Character,
+  ) {}
+
+  brokenPlateAppearance() {
+    this.graphics.renderBrokenPlate();
+    this.interactable = true;
+  }
+
+  brokenPlateCleaned() {
+    this.graphics.hideBrokenPlate();
+    this.interactable = false;
+  }
+
+  play() {
+    if (this.character.holding) return;
+    if (!this.interactable) return;
+    if (
+      this.physics.isCharacterOnBrokenPlate() > 130 &&
+      this.physics.isCharacterOnBrokenPlate() < 200
+    ) {
+      this.graphics.renderCleaningAnimation();
+      this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
+    }
+  }
+
+  cancel() {
+    this.graphics.stopCleaningAnimation();
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = undefined;
+    }
+  }
+}

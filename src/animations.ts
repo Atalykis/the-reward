@@ -57,6 +57,12 @@ export class MovementAnimation {
     this.movementAnimationIntervals.delete(direction);
   }
 
+  stopAll() {
+    for (const interval of this.movementAnimationIntervals.values()) {
+      clearInterval(interval);
+    }
+  }
+
   // stop() {
   //   clearInterval(this.movementAnimationInterval);
   // }

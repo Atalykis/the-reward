@@ -3,7 +3,7 @@ import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
 import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from './physics';
-import { Plates } from './physical';
+import { Plate, Plates } from './physical';
 import { BasicAnimation, MovementAnimation } from './animations';
 
 const mainMenuPng = new Image(1920, 1080);
@@ -30,8 +30,11 @@ leftPlantPng.src = 'leftPlant.png';
 const rightPlantPng = new Image(85, 166);
 rightPlantPng.src = 'rightPlant.png';
 
-const platePng = new Image(138, 112);
-platePng.src = 'plate.png';
+// const platePng = new Image(138, 112);
+// platePng.src = 'plate.png';
+
+const brokenPlatePng = new Image(126, 107);
+brokenPlatePng.src = 'broken-plate.png';
 
 export class Graphics {
   private stage: Stage = new Konva.Stage({
@@ -118,6 +121,14 @@ export class Graphics {
     height: 166,
   });
 
+  private brokenPlate: KonvaImage = new Konva.Image({
+    x: 1400,
+    y: 700,
+    image: brokenPlatePng,
+    widht: 94,
+    height: 80,
+  });
+
   private plates: KonvaImage[] = [];
 
   private interval: NodeJS.Timer | undefined;
@@ -133,6 +144,12 @@ export class Graphics {
   private mainMenuAnimation = new BasicAnimation(
     'main-menu/',
     mainMenuPng,
+    300,
+  );
+
+  private cleaningAnimation = new BasicAnimation(
+    'waiter/cleaning/',
+    characterPng,
     300,
   );
 
@@ -219,6 +236,7 @@ export class Graphics {
   }
 
   renderMovementAnimation(to: string) {
+    this.stopCleaningAnimation();
     this.movementAnimation.play(to, this.physics.character!.holding);
   }
 
@@ -273,6 +291,23 @@ export class Graphics {
     this.plates[index].show();
   }
 
+  renderBrokenPlate() {
+    this.backgroundLayer.add(this.brokenPlate);
+  }
+
+  hideBrokenPlate() {
+    this.brokenPlate.remove();
+  }
+
+  renderCleaningAnimation() {
+    this.movementAnimation.stopAll();
+    this.cleaningAnimation.play();
+  }
+
+  stopCleaningAnimation() {
+    this.cleaningAnimation.stop();
+  }
+
   resetLayers() {
     this.backgroundLayer.removeChildren();
     this.characterLayer.removeChildren();
@@ -285,6 +320,7 @@ export class Graphics {
 
   clear() {
     this.resetLayers();
+    this.stopCleaningAnimation();
     this.stage.removeChildren();
     this.plates = [];
     clearInterval(this.interval);

@@ -35,7 +35,10 @@ export class RunEvents {
 
   playInputs(inputs: GamepadInputs) {
     if (inputs.action.triggered) {
-      this.run.playPlateInteraction();
+      this.run.playInteractions();
+    }
+    if (!inputs.action.triggered) {
+      this.run.cancelCleaningInteraction();
     }
     if (inputs.movement.x === 0) {
       this.run.stopCharacterMovement('right');
@@ -101,7 +104,7 @@ export class RunEvents {
         this.run.stopCharacterMovement('down');
         break;
       case ' ':
-        this.run.playPlateInteraction();
+        this.run.playInteractions();
         break;
     }
     this.lastKeyDown = '';

@@ -160,4 +160,13 @@ export class Physics {
     if (this.character.position.y > 790) return true;
     return false;
   }
+
+  isCharacterOnBrokenPlate() {
+    const distance = this.getDistance(this.character!.position, {
+      x: 1400,
+      y: 700,
+    });
+    console.log(distance);
+    return distance;
+  }
 }

@@ -1,11 +1,12 @@
 import { AudioMixer } from './audio';
 import { Character } from './character';
 import type { Graphics } from './graphics';
-import { PlateInteractions } from './interaction';
+import { CleaningInteraction, PlateInteractions } from './interaction';
 import type { Physics, Position } from './physics';
 
 export class Run {
   private plateInteraction: PlateInteractions;
+  private cleaningInteraction: CleaningInteraction;
   private interval: NodeJS.Timer | undefined;
   private movementIntervals: Map<string, NodeJS.Timer> = new Map();
   private character: Character = new Character();
@@ -14,6 +15,11 @@ export class Run {
     this.audioMixer = new AudioMixer(this.physics);
     this.physics.setCharacter(this.character);
     this.plateInteraction = new PlateInteractions(
+      this.graphics,
+      this.physics,
+      this.character,
+    );
+    this.cleaningInteraction = new CleaningInteraction(
       this.graphics,
       this.physics,
       this.character,
@@ -32,6 +38,7 @@ export class Run {
     this.plateInteraction.reset();
     this.physics.resetCharacterPosition();
     setTimeout(() => this.initAudio(), 3000);
+    setTimeout(() => this.cleaningInteraction.brokenPlateAppearance(), 6000);
     setTimeout(() => this.gameOver(), 65000);
   }
 
@@ -110,8 +117,13 @@ export class Run {
     this.audioMixer.manageTablesSounds();
   }
 
-  playPlateInteraction() {
+  playInteractions() {
     this.plateInteraction.play();
+    this.cleaningInteraction.play();
+  }
+
+  cancelCleaningInteraction() {
+    this.cleaningInteraction.cancel();
   }
 
   stopCharacterMovement(direction: string) {
