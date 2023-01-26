@@ -9,7 +9,7 @@ export class Character {
     width: 100,
     height: 200,
   };
-  public speed: number = 3;
+  public speed: number = 6;
 
   public holding: boolean = false;
 

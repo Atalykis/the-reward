@@ -19,7 +19,7 @@ export class RunEvents {
   }
 
   gamepadEvents = () => {
-    setInterval(() => this.checkGamepad(), 16);
+    setInterval(() => this.checkGamepad(), 32);
   };
 
   checkGamepad() {

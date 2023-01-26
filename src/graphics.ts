@@ -232,7 +232,7 @@ export class Graphics {
   }
 
   renderCharacterMovement() {
-    this.interval = setInterval(() => this.moveCharacter(), 16);
+    this.interval = setInterval(() => this.moveCharacter(), 32);
   }
 
   renderMovementAnimation(to: string) {

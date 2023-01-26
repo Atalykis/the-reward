@@ -61,7 +61,7 @@ export class Run {
     if (this.movementIntervals.get('left')) return;
     this.movementIntervals.set(
       'left',
-      setInterval(() => this.moveLeft(), 16),
+      setInterval(() => this.moveLeft(), 32),
     );
     this.graphics.renderMovementAnimation('left');
   }
@@ -70,7 +70,7 @@ export class Run {
     if (this.movementIntervals.get('right')) return;
     this.movementIntervals.set(
       'right',
-      setInterval(() => this.moveRight(), 16),
+      setInterval(() => this.moveRight(), 32),
     );
     this.graphics.renderMovementAnimation('right');
   }
@@ -79,7 +79,7 @@ export class Run {
     if (this.movementIntervals.get('up')) return;
     this.movementIntervals.set(
       'up',
-      setInterval(() => this.moveUp(), 16),
+      setInterval(() => this.moveUp(), 32),
     );
     this.graphics.renderMovementAnimation('up');
   }
@@ -88,7 +88,7 @@ export class Run {
     if (this.movementIntervals.get('down')) return;
     this.movementIntervals.set(
       'down',
-      setInterval(() => this.moveDown(), 16),
+      setInterval(() => this.moveDown(), 32),
     );
     this.graphics.renderMovementAnimation('down');
   }
