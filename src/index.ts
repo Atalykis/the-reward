@@ -1,34 +1,43 @@
-// import { Audio } from './audio'
-import { AudioMixer } from './audio';
-import { MenuEvents, RunEvents } from './event';
-import { Graphics } from './graphics';
+import { InputsProvider } from './inputs-provider';
+import { Graphics } from './graphics/graphics';
 import { MainMenu } from './main-menu';
 import { Physics } from './physics';
 import { Run } from './run';
 
+export type Context = 'Menu' | 'Run';
+
 export class Game {
   private mainMenu: MainMenu;
   public run: Run;
-  private menuEvents: MenuEvents;
-  private runEvents: RunEvents;
+  private inputsProvider: InputsProvider = new InputsProvider();
+  private context: Context = 'Menu';
   constructor(public graphics: Graphics, private physics: Physics) {
     this.mainMenu = new MainMenu(graphics);
     this.run = new Run(this.graphics, this.physics);
-    this.menuEvents = new MenuEvents(this.graphics, this.switchMode.bind(this));
-    this.runEvents = new RunEvents(this.run);
     this.switchMode('Menu');
+    this.inputsProvider.mountGamepad();
+    setInterval(() => this.tick(), 31);
   }
 
   menuMode() {
     this.mainMenu.render();
-    this.menuEvents.mount();
   }
 
   runMode() {
-    this.menuEvents.unmount();
     this.run.startRun();
-    // this.runEvents.mountKeyboard()
-    this.runEvents.mountGamepad();
+  }
+
+  tick() {
+    const inputs = this.inputsProvider.getInputs();
+    if (this.context === 'Menu') {
+      if (inputs.action.triggered) {
+        this.switchMode('Run');
+        this.context = 'Run';
+      }
+    }
+    if (this.context === 'Run') {
+      this.run.tick(inputs);
+    }
   }
 
   switchMode(mode: string) {

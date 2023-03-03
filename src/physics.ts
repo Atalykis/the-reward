@@ -1,5 +1,8 @@
 import type { Character } from './character';
-import { Physical, Plants, Tables } from './physical';
+import type { Movement } from './inputs-provider';
+import type { Physical } from './physical/physical';
+import { Plants } from './physical/plant';
+import { Tables } from './physical/table';
 
 export interface Position {
   x: number;
@@ -74,10 +77,19 @@ export class Physics {
 
   canMove(to: Position) {
     if (!this.character) return;
+    const isCharacterInsideOfStage =
+      to.x < this.stageSize.width - this.character.size.width &&
+      to.x > 0 &&
+      to.y < this.stageSize.height - this.character.size.height &&
+      to.y > 0;
+
+    if (!isCharacterInsideOfStage) return false;
+
     const nextCenter = {
       x: to.x + this.character.size.width / 2,
       y: to.y + this.character.size.height / 2,
     };
+
     for (const object of this.physicals) {
       const objectCenter = object.getCenter();
       const { distanceX, distanceY } = this.getDistancesXY(
@@ -95,48 +107,11 @@ export class Physics {
     return true;
   }
 
-  moveRight() {
+  tick(movement: Movement) {
     if (!this.character) return;
-    const next = {
-      x: this.character.position.x + this.character.speed,
-      y: this.character.position.y,
-    };
-    if (next.x + this.character.size.width + 50 > this.stageSize.width) return;
-    if (!this.canMove(next)) return;
-    this.character.move(next);
-  }
-
-  moveLeft() {
-    if (!this.character) return;
-    const next = {
-      x: this.character.position.x - this.character.speed,
-      y: this.character.position.y,
-    };
-    if (next.x < -50) return;
-    if (!this.canMove(next)) return;
-    this.character.move(next);
-  }
-
-  moveDown() {
-    if (!this.character) return;
-    const next = {
-      x: this.character.position.x,
-      y: this.character.position.y + this.character.speed,
-    };
-    if (next.y + this.character.size.height > this.stageSize.height) return;
-    if (!this.canMove(next)) return;
-    this.character.move(next);
-  }
-
-  moveUp() {
-    if (!this.character) return;
-    const next = {
-      x: this.character.position.x,
-      y: this.character.position.y - this.character.speed,
-    };
-    if (next.y < -10) return;
-    if (!this.canMove(next)) return;
-    this.character.move(next);
+    this.character.turn(movement.angle, movement.intensity);
+    const next = this.character.getNextPosition();
+    if (this.canMove(next)) this.character.move();
   }
 
   resetCharacterPosition() {
@@ -166,7 +141,8 @@ export class Physics {
       x: 1400,
       y: 700,
     });
-    console.log(distance);
-    return distance;
+
+    if (distance > 130 && distance < 200) return true;
+    return false;
   }
 }
