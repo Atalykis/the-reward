@@ -1,6 +1,6 @@
 import type { Character } from './character';
-import type { Graphics } from './graphics';
-import { Plate, Plates } from './physical';
+import type { Graphics } from './graphics/graphics';
+import { Plate, Plates } from './physical/plate';
 import type { Physics } from './physics';
 
 export class PlateInteractions {
@@ -82,12 +82,11 @@ export class CleaningInteraction {
   play() {
     if (this.character.holding) return;
     if (!this.interactable) return;
-    if (
-      this.physics.isCharacterOnBrokenPlate() > 130 &&
-      this.physics.isCharacterOnBrokenPlate() < 200
-    ) {
+    if (this.physics.isCharacterOnBrokenPlate()) {
       this.graphics.renderCleaningAnimation();
-      this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
+      if (!this.timeout) {
+        this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
+      }
     }
   }
 

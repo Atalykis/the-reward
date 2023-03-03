@@ -1,4 +1,5 @@
-import type { Physics, Position } from './physics';
+import { Physics } from '../physics';
+import { Sound } from './sound';
 
 export class AudioMixer {
   private context: AudioContext = new AudioContext();
@@ -60,14 +61,23 @@ export class AudioMixer {
       'table1',
       this.sounds,
     );
-    // this.createSoundFromSrc('piano.mp3', 'table2', this.sounds);
+    this.createSoundFromSrc(
+      'sounds/tables/3-peoples.mp3',
+      'table2',
+      this.sounds,
+    );
+
+    this.createSoundFromSrc(
+      'sounds/tables/4-peoples-2.mp3',
+      'table3',
+      this.sounds,
+    );
+
     this.createSoundFromSrc(
       'sounds/tables/4-peoples.mp3',
       'table4',
       this.sounds,
     );
-    // this.createSoundFromSrc('batterie.mp3', 'table4', this.sounds);
-    this.createSoundFromSrc('bar.mp3', 'bar', this.sounds);
   }
 
   async initBossSounds() {
@@ -132,23 +142,5 @@ export class AudioMixer {
     this.currentBossSound++;
     this.playOneBossSound(`${this.currentBossSound}`);
     setTimeout(() => (this.bossSoundPlaying = false), 9000);
-  }
-}
-
-export class Sound {
-  public position: Position | undefined;
-  constructor(private source: AudioBufferSourceNode, private gain: GainNode) {}
-
-  changeGain(to: number) {
-    this.gain.gain.value = to;
-  }
-
-  play() {
-    this.source.loop = false;
-    this.source.start();
-  }
-
-  stop() {
-    this.source.stop();
   }
 }

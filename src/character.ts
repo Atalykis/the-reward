@@ -9,20 +9,39 @@ export class Character {
     width: 100,
     height: 200,
   };
-  public speed: number = 3;
+  public speed: number = 0;
+
+  public baseSpeed: number = 6;
+
+  public angle: number = 0;
 
   public holding: boolean = false;
 
   constructor() {}
 
-  move(to: Position) {
-    this.position = to;
+  move() {
+    this.position.x += Math.cos(this.angle) * this.speed;
+    this.position.y -= Math.sin(this.angle) * this.speed;
+  }
+
+  turn(angle: number, intensity: number) {
+    if (intensity > 0) {
+      this.angle = angle;
+    }
+    this.speed = this.baseSpeed * intensity;
   }
 
   getCenter(): Position {
     return {
       x: this.position.x + this.size.width,
       y: this.position.y + this.size.height / 2,
+    };
+  }
+
+  getNextPosition(): Position {
+    return {
+      x: this.position.x + Math.cos(this.angle) * this.speed,
+      y: this.position.y - Math.sin(this.angle) * this.speed,
     };
   }
 

@@ -2,9 +2,9 @@ import Konva from 'konva';
 import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
 import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
-import type { Physics, Position } from './physics';
-import { Plate, Plates } from './physical';
-import { BasicAnimation, MovementAnimation } from './animations';
+import type { Physics, Position } from '../physics';
+import { BasicAnimation, MovementAnimation } from '../animations';
+import { Plates } from '../physical/plate';
 
 const mainMenuPng = new Image(1920, 1080);
 mainMenuPng.src = 'main-menu/0.png';
@@ -13,28 +13,25 @@ const gameOverPng = new Image(1920, 1080);
 gameOverPng.src = 'game-over/0.png';
 
 const restaurantPng = new Image(1920, 1080);
-restaurantPng.src = 'restaurant.png';
+restaurantPng.src = 'restaurant/restaurant.png';
 
 const topTablesPng = new Image(1920, 1080);
-topTablesPng.src = 'top-tables.png';
+topTablesPng.src = 'restaurant/top-tables.png';
 
 const bottomTablesPng = new Image(1920, 1080);
-bottomTablesPng.src = 'bottom-tables.png';
+bottomTablesPng.src = 'restaurant/bottom-tables.png';
 
 const characterPng = new Image(200, 220);
 characterPng.src = '/waiter/stopped/front.png';
 
 const leftPlantPng = new Image(85, 166);
-leftPlantPng.src = 'leftPlant.png';
+leftPlantPng.src = 'restaurant/leftPlant.png';
 
 const rightPlantPng = new Image(85, 166);
-rightPlantPng.src = 'rightPlant.png';
-
-// const platePng = new Image(138, 112);
-// platePng.src = 'plate.png';
+rightPlantPng.src = 'restaurant/rightPlant.png';
 
 const brokenPlatePng = new Image(126, 107);
-brokenPlatePng.src = 'broken-plate.png';
+brokenPlatePng.src = 'plates/broken-plate.png';
 
 export class Graphics {
   private stage: Stage = new Konva.Stage({
@@ -232,7 +229,7 @@ export class Graphics {
   }
 
   renderCharacterMovement() {
-    this.interval = setInterval(() => this.moveCharacter(), 16);
+    this.interval = setInterval(() => this.moveCharacter(), 30);
   }
 
   renderMovementAnimation(to: string) {
@@ -240,8 +237,8 @@ export class Graphics {
     this.movementAnimation.play(to, this.physics.character!.holding);
   }
 
-  stopAnimation(direction: string) {
-    this.movementAnimation.stop(direction);
+  stopMovementAnimation() {
+    this.movementAnimation.stopAll();
   }
 
   moveCharacter() {

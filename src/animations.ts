@@ -1,5 +1,4 @@
 export class MovementAnimation {
-  // private movementAnimationInterval: NodeJS.Timer | undefined;
   private movementAnimationIntervals: Map<string, NodeJS.Timer> = new Map();
   private previousFrame: string = '2';
   private currentFrame: string = '0';
@@ -7,9 +6,11 @@ export class MovementAnimation {
   constructor(private character: HTMLImageElement) {}
 
   play(to: string, holding: boolean) {
-    this.nextFrame(to, holding);
+    const interval = this.movementAnimationIntervals.get(to);
+    if (interval && this.lastDirection === to) return;
     clearInterval(this.movementAnimationIntervals.get(this.lastDirection));
     this.lastDirection = to;
+    this.nextFrame(to, holding);
     this.movementAnimationIntervals.set(
       to,
       setInterval(() => this.nextFrame(to, holding), 200),
@@ -61,11 +62,8 @@ export class MovementAnimation {
     for (const interval of this.movementAnimationIntervals.values()) {
       clearInterval(interval);
     }
+    this.movementAnimationIntervals = new Map();
   }
-
-  // stop() {
-  //   clearInterval(this.movementAnimationInterval);
-  // }
 }
 
 export class BasicAnimation {

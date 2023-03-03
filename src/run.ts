@@ -1,14 +1,14 @@
-import { AudioMixer } from './audio';
+import { AudioMixer } from './audio/audio-mixer';
 import { Character } from './character';
-import type { Graphics } from './graphics';
+import type { GamepadAnalogicInputs } from './inputs-provider';
+import type { Graphics } from './graphics/graphics';
 import { CleaningInteraction, PlateInteractions } from './interaction';
-import type { Physics, Position } from './physics';
+import type { Physics } from './physics';
 
 export class Run {
   private plateInteraction: PlateInteractions;
   private cleaningInteraction: CleaningInteraction;
   private interval: NodeJS.Timer | undefined;
-  private movementIntervals: Map<string, NodeJS.Timer> = new Map();
   private character: Character = new Character();
   private audioMixer: AudioMixer;
   constructor(private graphics: Graphics, private physics: Physics) {
@@ -34,12 +34,11 @@ export class Run {
   loop() {
     this.audioMixer = new AudioMixer(this.physics);
     this.graphics.renderRestaurant();
-    this.stopAllCharacterMovement();
     this.plateInteraction.reset();
     this.physics.resetCharacterPosition();
     setTimeout(() => this.initAudio(), 3000);
     setTimeout(() => this.cleaningInteraction.brokenPlateAppearance(), 6000);
-    setTimeout(() => this.gameOver(), 65000);
+    setTimeout(() => this.gameOver(), 63000);
   }
 
   gameOver() {
@@ -57,66 +56,54 @@ export class Run {
     clearInterval(this.interval);
   }
 
-  moveCharacterLeft() {
-    if (this.movementIntervals.get('left')) return;
-    this.movementIntervals.set(
-      'left',
-      setInterval(() => this.moveLeft(), 16),
-    );
-    this.graphics.renderMovementAnimation('left');
-  }
-
-  moveCharacterRight() {
-    if (this.movementIntervals.get('right')) return;
-    this.movementIntervals.set(
-      'right',
-      setInterval(() => this.moveRight(), 16),
-    );
-    this.graphics.renderMovementAnimation('right');
-  }
-
-  moveCharacterUp() {
-    if (this.movementIntervals.get('up')) return;
-    this.movementIntervals.set(
-      'up',
-      setInterval(() => this.moveUp(), 16),
-    );
-    this.graphics.renderMovementAnimation('up');
-  }
-
-  moveCharacterDown() {
-    if (this.movementIntervals.get('down')) return;
-    this.movementIntervals.set(
-      'down',
-      setInterval(() => this.moveDown(), 16),
-    );
-    this.graphics.renderMovementAnimation('down');
-  }
-
-  moveLeft() {
-    this.physics.moveLeft();
+  tick(inputs: GamepadAnalogicInputs) {
+    this.physics.tick(inputs.movement);
+    if (inputs.action.triggered) {
+      this.playInteractions();
+    } else {
+      this.cancelCleaningInteraction();
+    }
+    if (inputs.movement.intensity > 0) {
+      this.cancelCleaningInteraction();
+      const direction = this.translateAngleToDirection(inputs.movement.angle);
+      this.graphics.renderMovementAnimation(direction);
+    } else {
+      this.graphics.stopMovementAnimation();
+    }
     this.audioMixer.manageTablesSounds();
     this.audioMixer.manageBossSentence();
   }
 
-  moveRight() {
-    this.physics.moveRight();
-    this.audioMixer.manageBossSentence();
-    this.audioMixer.manageTablesSounds();
+  translateAngleToDirection(angle: number) {
+    let direction = '';
+    switch (angle) {
+      case 0:
+        direction = 'right';
+        break;
+      case Math.PI / 4:
+        direction = 'right';
+        break;
+      case Math.PI / 2:
+        direction = 'up';
+        break;
+      case (3 * Math.PI) / 4:
+        direction = 'left';
+        break;
+      case Math.PI:
+        direction = 'left';
+        break;
+      case (5 * Math.PI) / 4:
+        direction = 'left';
+        break;
+      case (3 * Math.PI) / 2:
+        direction = 'down';
+        break;
+      case (7 * Math.PI) / 4:
+        direction = 'right';
+        break;
+    }
+    return direction;
   }
-
-  moveUp() {
-    this.physics.moveUp();
-    this.audioMixer.manageBossSentence();
-    this.audioMixer.manageTablesSounds();
-  }
-
-  moveDown() {
-    this.physics.moveDown();
-    this.audioMixer.manageBossSentence();
-    this.audioMixer.manageTablesSounds();
-  }
-
   playInteractions() {
     this.plateInteraction.play();
     this.cleaningInteraction.play();
@@ -124,18 +111,5 @@ export class Run {
 
   cancelCleaningInteraction() {
     this.cleaningInteraction.cancel();
-  }
-
-  stopCharacterMovement(direction: string) {
-    const interval = this.movementIntervals.get(direction);
-    clearInterval(interval);
-    this.movementIntervals.delete(direction);
-    this.graphics.stopAnimation(direction);
-  }
-
-  stopAllCharacterMovement() {
-    for (const interval of this.movementIntervals.values()) {
-      clearInterval(interval);
-    }
   }
 }
