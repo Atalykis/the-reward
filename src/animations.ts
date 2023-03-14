@@ -28,26 +28,26 @@ export class MovementAnimation {
       if (this.previousFrame === '1') {
         this.previousFrame = '0';
         this.currentFrame = '2';
-        this.character.src = `/waiter/${frameType}/${to}/2.png`;
+        this.character.src = `/assets/waiter/${frameType}/${to}/2.png`;
         return;
       }
       if (this.previousFrame === '2') {
         this.previousFrame = '0';
         this.currentFrame = '1';
-        this.character.src = `/waiter/${frameType}/${to}/1.png`;
+        this.character.src = `/assets/waiter/${frameType}/${to}/1.png`;
         return;
       }
     }
     if (this.currentFrame === '2') {
       this.previousFrame = '2';
       this.currentFrame = '0';
-      this.character.src = `/waiter/${frameType}/${to}/0.png`;
+      this.character.src = `/assets/waiter/${frameType}/${to}/0.png`;
       return;
     }
     if (this.currentFrame === '1') {
       this.previousFrame = '1';
       this.currentFrame = '0';
-      this.character.src = `/waiter/${frameType}/${to}/0.png`;
+      this.character.src = `/assets/waiter/${frameType}/${to}/0.png`;
       return;
     }
   }

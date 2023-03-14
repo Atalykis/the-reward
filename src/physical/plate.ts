@@ -57,48 +57,48 @@ const plate1 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 0, y: 0 },
-  'plates/plate.png',
+  '/assets/plates/plate.png',
 );
 
 const plate2 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 500, y: 500 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 
 const plate3 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 590, y: 500 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 
 const plate4 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 1375, y: 790 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 
 const plate5 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 1465, y: 790 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 
 const plate6 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 1465, y: 850 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 
 const plate7 = new Plate(
   { x: 1150, y: 40 },
   { width: 92, height: 74 },
   { x: 1375, y: 850 },
-  'plates/lasagnas.png',
+  '/assets/plates/lasagnas.png',
 );
 export const Plates = [plate1, plate2, plate3, plate4, plate5, plate6, plate7];

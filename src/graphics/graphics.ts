@@ -5,33 +5,28 @@ import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from '../physics';
 import { BasicAnimation, MovementAnimation } from '../animations';
 import { Plates } from '../physical/plate';
+import { ImageStore } from './image-store';
 
 const mainMenuPng = new Image(1920, 1080);
-mainMenuPng.src = 'main-menu/0.png';
+mainMenuPng.src = '/assets/main-menu/0.png';
 
 const gameOverPng = new Image(1920, 1080);
-gameOverPng.src = 'game-over/0.png';
+gameOverPng.src = '/assets/game-over/0.png';
 
 const restaurantPng = new Image(1920, 1080);
-restaurantPng.src = 'restaurant/restaurant.png';
-
-const topTablesPng = new Image(1920, 1080);
-topTablesPng.src = 'restaurant/top-tables.png';
-
-const bottomTablesPng = new Image(1920, 1080);
-bottomTablesPng.src = 'restaurant/bottom-tables.png';
+restaurantPng.src = '/assets/restaurant/restaurant.png';
 
 const characterPng = new Image(200, 220);
-characterPng.src = '/waiter/stopped/front.png';
+characterPng.src = '/assets/waiter/stopped/front.png';
 
 const leftPlantPng = new Image(85, 166);
-leftPlantPng.src = 'restaurant/leftPlant.png';
+leftPlantPng.src = '/assets/restaurant/leftPlant.png';
 
 const rightPlantPng = new Image(85, 166);
-rightPlantPng.src = 'restaurant/rightPlant.png';
+rightPlantPng.src = '/assets/restaurant/rightPlant.png';
 
 const brokenPlatePng = new Image(126, 107);
-brokenPlatePng.src = 'plates/broken-plate.png';
+brokenPlatePng.src = '/assets/plates/broken-plate.png';
 
 export class Graphics {
   private stage: Stage = new Konva.Stage({
@@ -62,21 +57,21 @@ export class Graphics {
     height: 1080,
   });
 
-  private topTables: KonvaImage = new Konva.Image({
-    x: 0,
-    y: 0,
-    image: topTablesPng,
-    widht: 1920,
-    height: 1080,
-  });
+  // private topTables: KonvaImage = new Konva.Image({
+  //   x: 0,
+  //   y: 0,
+  //   image: topTablesPng,
+  //   widht: 1920,
+  //   height: 1080,
+  // });
 
-  private bottomTables: KonvaImage = new Konva.Image({
-    x: 0,
-    y: 0,
-    image: bottomTablesPng,
-    widht: 1920,
-    height: 1080,
-  });
+  // private bottomTables: KonvaImage = new Konva.Image({
+  //   x: 0,
+  //   y: 0,
+  //   image: bottomTablesPng,
+  //   widht: 1920,
+  //   height: 1080,
+  // });
 
   public mainMenu: KonvaImage = new Konva.Image({
     x: 0,
@@ -133,19 +128,19 @@ export class Graphics {
   private movementAnimation = new MovementAnimation(characterPng);
 
   private gameOverAnimation = new BasicAnimation(
-    'game-over/',
+    '/assets/game-over/',
     gameOverPng,
     200,
   );
 
   private mainMenuAnimation = new BasicAnimation(
-    'main-menu/',
+    '/assets/main-menu/',
     mainMenuPng,
     300,
   );
 
   private cleaningAnimation = new BasicAnimation(
-    'waiter/cleaning/',
+    '/assets/waiter/cleaning/',
     characterPng,
     300,
   );
@@ -166,11 +161,11 @@ export class Graphics {
   }
 
   setTopLayer() {
-    this.topTablesLayer.add(this.topTables);
+    // this.topTablesLayer.add(this.topTables);
   }
 
   setBottomTablesLayer() {
-    this.bottomTablesLayer.add(this.bottomTables);
+    // this.bottomTablesLayer.add(this.bottomTables);
   }
 
   setBottomPlantsLayer() {

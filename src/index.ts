@@ -3,6 +3,7 @@ import { Graphics } from './graphics/graphics';
 import { MainMenu } from './main-menu';
 import { Physics } from './physics';
 import { Run } from './run';
+import { ImageStore } from './graphics/image-store';
 
 export type Context = 'Menu' | 'Run';
 
