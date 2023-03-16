@@ -3,9 +3,8 @@ import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
 import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from '../physics';
-import { BasicAnimation, MovementAnimation } from '../animations';
+import { BasicAnimation, MovementAnimation } from './animations';
 import { Plates } from '../physical/plate';
-import { ImageStore } from './image-store';
 
 const mainMenuPng = new Image(1920, 1080);
 mainMenuPng.src = '/assets/main-menu/0.png';
@@ -27,6 +26,24 @@ rightPlantPng.src = '/assets/restaurant/rightPlant.png';
 
 const brokenPlatePng = new Image(126, 107);
 brokenPlatePng.src = '/assets/plates/broken-plate.png';
+
+const table1Png = new Image(473, 243);
+table1Png.src = '/assets/restaurant/table1/0.png';
+
+const table2Png = new Image(474, 296);
+table2Png.src = '/assets/restaurant/table2/0.png';
+
+const table3Png = new Image(474, 291);
+table3Png.src = '/assets/restaurant/table3/0.png';
+
+const table4Png = new Image(474, 297);
+table4Png.src = '/assets/restaurant/table4/0.png';
+
+const barPng = new Image(644, 161);
+barPng.src = '/assets/restaurant/bar/bar.png';
+
+const bartenderPng = new Image(67, 171);
+bartenderPng.src = '/assets/restaurant/bar/0.png';
 
 export class Graphics {
   private stage: Stage = new Konva.Stage({
@@ -57,21 +74,53 @@ export class Graphics {
     height: 1080,
   });
 
-  // private topTables: KonvaImage = new Konva.Image({
-  //   x: 0,
-  //   y: 0,
-  //   image: topTablesPng,
-  //   widht: 1920,
-  //   height: 1080,
-  // });
+  private table1: KonvaImage = new Konva.Image({
+    x: 350,
+    y: 390,
+    image: table1Png,
+    widht: 473,
+    height: 243,
+  });
 
-  // private bottomTables: KonvaImage = new Konva.Image({
-  //   x: 0,
-  //   y: 0,
-  //   image: bottomTablesPng,
-  //   widht: 1920,
-  //   height: 1080,
-  // });
+  private table2: KonvaImage = new Konva.Image({
+    x: 1350,
+    y: 340,
+    image: table2Png,
+    widht: 474,
+    height: 296,
+  });
+
+  private table3: KonvaImage = new Konva.Image({
+    x: 175,
+    y: 700,
+    image: table3Png,
+    widht: 474,
+    height: 291,
+  });
+
+  private table4: KonvaImage = new Konva.Image({
+    x: 1230,
+    y: 700,
+    image: table4Png,
+    widht: 474,
+    height: 297,
+  });
+
+  private bar: KonvaImage = new Konva.Image({
+    x: 185,
+    y: 110,
+    image: barPng,
+    widht: 644,
+    height: 161,
+  });
+
+  private bartender: KonvaImage = new Konva.Image({
+    x: 473,
+    y: 70,
+    image: bartenderPng,
+    widht: 67,
+    height: 171,
+  });
 
   public mainMenu: KonvaImage = new Konva.Image({
     x: 0,
@@ -145,6 +194,36 @@ export class Graphics {
     300,
   );
 
+  private table1Animation = new BasicAnimation(
+    '/assets/restaurant/table1/',
+    table1Png,
+    500,
+  );
+
+  private table2Animation = new BasicAnimation(
+    '/assets/restaurant/table2/',
+    table2Png,
+    500,
+  );
+
+  private table3Animation = new BasicAnimation(
+    '/assets/restaurant/table3/',
+    table3Png,
+    500,
+  );
+
+  private table4Animation = new BasicAnimation(
+    '/assets/restaurant/table4/',
+    table4Png,
+    500,
+  );
+
+  private bartenderAnimation = new BasicAnimation(
+    '/assets/restaurant/bar/',
+    bartenderPng,
+    500,
+  );
+
   constructor(private physics: Physics) {}
 
   setPlates() {
@@ -161,11 +240,13 @@ export class Graphics {
   }
 
   setTopLayer() {
-    // this.topTablesLayer.add(this.topTables);
+    this.topTablesLayer.add(this.table1);
+    this.topTablesLayer.add(this.table2);
   }
 
   setBottomTablesLayer() {
-    // this.bottomTablesLayer.add(this.bottomTables);
+    this.bottomTablesLayer.add(this.table3);
+    this.bottomTablesLayer.add(this.table4);
   }
 
   setBottomPlantsLayer() {
@@ -175,6 +256,8 @@ export class Graphics {
 
   setBackgroundLayer() {
     this.backgroundLayer.add(this.restaurant);
+    this.backgroundLayer.add(this.bartender);
+    this.backgroundLayer.add(this.bar);
     this.backgroundLayer.add(this.plates[1]);
   }
 
@@ -221,6 +304,11 @@ export class Graphics {
     this.characterLayer.draw();
     this.bottomTablesLayer.draw();
     this.bottomPlantsLayer.draw();
+    this.table1Animation.play();
+    this.table2Animation.play();
+    this.table3Animation.play();
+    this.table4Animation.play();
+    this.bartenderAnimation.play();
   }
 
   renderCharacterMovement() {
@@ -273,12 +361,7 @@ export class Graphics {
   }
 
   showPlateOnTable(index: number, table: Position) {
-    if (index < 3) {
-      this.topTablesLayer.add(this.plates[index]);
-    }
-    if (index >= 3) {
-      this.bottomTablesLayer.add(this.plates[index]);
-    }
+    this.bottomTablesLayer.add(this.plates[index]);
     this.plates[index].setAttrs(table);
     this.plates[index].show();
   }

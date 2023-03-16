@@ -53,52 +53,39 @@ export class PlateBuilder {
   }
 }
 
-const plate1 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 0, y: 0 },
-  '/assets/plates/plate.png',
-);
+const plate0 = new PlateBuilder()
+  .at({ x: 1150, y: 40 })
+  .deliverTo({ x: 0, y: 0 })
+  .sized({ width: 92, height: 74 })
+  .withSrc('/assets/plates/plate.png')
+  .build();
 
-const plate2 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 500, y: 500 },
-  '/assets/plates/lasagnas.png',
-);
+const plate1 = new PlateBuilder()
+  .at({ x: 1150, y: 40 })
+  .deliverTo({ x: 410, y: 785 })
+  .sized({ width: 92, height: 74 })
+  .withSrc('/assets/plates/lasagnas.png')
+  .build();
 
-const plate3 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 590, y: 500 },
-  '/assets/plates/lasagnas.png',
-);
+const plate2 = new PlateBuilder()
+  .at({ x: 1150, y: 40 })
+  .deliverTo({ x: 310, y: 785 })
+  .sized({ width: 92, height: 74 })
+  .withSrc('/assets/plates/lasagnas.png')
+  .build();
 
-const plate4 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 1375, y: 790 },
-  '/assets/plates/lasagnas.png',
-);
+const plate3 = new PlateBuilder()
+  .at({ x: 1150, y: 40 })
+  .deliverTo({ x: 315, y: 845 })
+  .sized({ width: 92, height: 74 })
+  .withSrc('/assets/plates/lasagnas.png')
+  .build();
 
-const plate5 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 1465, y: 790 },
-  '/assets/plates/lasagnas.png',
-);
+const plate4 = new PlateBuilder()
+  .at({ x: 1150, y: 40 })
+  .deliverTo({ x: 410, y: 845 })
+  .sized({ width: 92, height: 74 })
+  .withSrc('/assets/plates/lasagnas.png')
+  .build();
 
-const plate6 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 1465, y: 850 },
-  '/assets/plates/lasagnas.png',
-);
-
-const plate7 = new Plate(
-  { x: 1150, y: 40 },
-  { width: 92, height: 74 },
-  { x: 1375, y: 850 },
-  '/assets/plates/lasagnas.png',
-);
-export const Plates = [plate1, plate2, plate3, plate4, plate5, plate6, plate7];
+export const Plates = [plate0, plate1, plate2, plate3, plate4];

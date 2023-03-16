@@ -57,7 +57,7 @@ const table2 = new Table(
 
 const table3 = new Table(
   { x: 160, y: 800 },
-  { width: 400, height: 10 },
+  { width: 400, height: 30 },
   'table3',
 );
 

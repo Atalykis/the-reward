@@ -1,11 +1,13 @@
-import type { Character } from './character';
-import type { Graphics } from './graphics/graphics';
-import { Plate, Plates } from './physical/plate';
-import type { Physics } from './physics';
+import { Physics } from '../physics';
+import { Plate, Plates } from '../physical/plate';
+import { Character } from '../physical/character';
+import { Graphics } from '../graphics/graphics';
 
 export class PlateInteractions {
   private plates: Plate[] = Plates;
   private serving: number = 1;
+
+  public served = 0;
   constructor(
     private graphics: Graphics,
     private physics: Physics,
@@ -15,6 +17,7 @@ export class PlateInteractions {
   play(): void {
     if (this.character.holding) {
       this.servePlate(this.serving);
+      this.served++;
     } else {
       this.holdPlate(this.serving);
     }
@@ -39,7 +42,7 @@ export class PlateInteractions {
       this.plates[index].destination,
     );
     if (distanceX > 100 || distanceX < 0) return;
-    if (distanceY < -100 || distanceY > 50) return;
+    if (distanceY < -100 || distanceY > 60) return;
 
     this.graphics.showPlateOnTable(index, this.plates[index].destination);
     this.character.reverseHolding();
@@ -57,44 +60,5 @@ export class PlateInteractions {
 
   reset() {
     this.serving = 1;
-  }
-}
-
-export class CleaningInteraction {
-  private interactable: boolean = false;
-  private timeout: NodeJS.Timeout | undefined;
-  constructor(
-    private graphics: Graphics,
-    private physics: Physics,
-    private character: Character,
-  ) {}
-
-  brokenPlateAppearance() {
-    this.graphics.renderBrokenPlate();
-    this.interactable = true;
-  }
-
-  brokenPlateCleaned() {
-    this.graphics.hideBrokenPlate();
-    this.interactable = false;
-  }
-
-  play() {
-    if (this.character.holding) return;
-    if (!this.interactable) return;
-    if (this.physics.isCharacterOnBrokenPlate()) {
-      this.graphics.renderCleaningAnimation();
-      if (!this.timeout) {
-        this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
-      }
-    }
-  }
-
-  cancel() {
-    this.graphics.stopCleaningAnimation();
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = undefined;
-    }
   }
 }

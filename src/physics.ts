@@ -1,4 +1,4 @@
-import type { Character } from './character';
+import type { Character } from './physical/character';
 import type { Movement } from './inputs-provider';
 import type { Physical } from './physical/physical';
 import { Plants } from './physical/plant';
@@ -132,7 +132,7 @@ export class Physics {
 
   isCharacterBellowBottomTables() {
     if (!this.character) return false;
-    if (this.character.position.y > 790) return true;
+    if (this.character.position.y > 760) return true;
     return false;
   }
 

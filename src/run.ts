@@ -1,8 +1,9 @@
 import { AudioMixer } from './audio/audio-mixer';
-import { Character } from './character';
+import { Character } from './physical/character';
 import type { GamepadAnalogicInputs } from './inputs-provider';
 import type { Graphics } from './graphics/graphics';
-import { CleaningInteraction, PlateInteractions } from './interaction';
+import { CleaningInteraction } from './interactions/cleaning';
+import { PlateInteractions } from './interactions/serve';
 import type { Physics } from './physics';
 
 export class Run {

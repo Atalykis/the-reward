@@ -1,4 +1,4 @@
-import type { Position, Size } from './physics';
+import type { Position, Size } from '../physics';
 
 export class Character {
   public position: Position = {
@@ -11,7 +11,7 @@ export class Character {
   };
   public speed: number = 0;
 
-  public baseSpeed: number = 6;
+  public baseSpeed: number = 8;
 
   public angle: number = 0;
 
