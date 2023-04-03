@@ -1,10 +1,11 @@
 import Konva from 'konva';
 import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
-import type { Image as KonvaImage } from 'konva/lib/shapes/Image';
+import { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from '../physics';
 import { BasicAnimation, MovementAnimation } from './animations';
 import { Plates } from '../physical/plate';
+import { Glasses } from '../physical/glass';
 
 const mainMenuPng = new Image(1920, 1080);
 mainMenuPng.src = '/assets/main-menu/0.png';
@@ -24,7 +25,7 @@ leftPlantPng.src = '/assets/restaurant/leftPlant.png';
 const rightPlantPng = new Image(85, 166);
 rightPlantPng.src = '/assets/restaurant/rightPlant.png';
 
-const brokenPlatePng = new Image(126, 107);
+const brokenPlatePng = new Image(67, 57);
 brokenPlatePng.src = '/assets/plates/broken-plate.png';
 
 const table1Png = new Image(473, 243);
@@ -44,6 +45,9 @@ barPng.src = '/assets/restaurant/bar/bar.png';
 
 const bartenderPng = new Image(67, 171);
 bartenderPng.src = '/assets/restaurant/bar/0.png';
+
+const barPlatePng = new Image(59, 43);
+barPlatePng.src = '/assets/glasses/bar-plate.png';
 
 export class Graphics {
   private stage: Stage = new Konva.Stage({
@@ -146,7 +150,7 @@ export class Graphics {
     height: 220,
   });
 
-  private leftPlant: KonvaImage = new Konva.Image({
+  private bottomLeftPlant: KonvaImage = new Konva.Image({
     x: 0,
     y: 915,
     image: leftPlantPng,
@@ -154,9 +158,25 @@ export class Graphics {
     height: 166,
   });
 
-  private rightPlant: KonvaImage = new Konva.Image({
+  private bottomRightPlant: KonvaImage = new Konva.Image({
     x: 1835,
     y: 920,
+    image: rightPlantPng,
+    widht: 85,
+    height: 166,
+  });
+
+  private topLeftPlant: KonvaImage = new Konva.Image({
+    x: 0,
+    y: 10,
+    image: leftPlantPng,
+    widht: 85,
+    height: 166,
+  });
+
+  private topRightPlant: KonvaImage = new Konva.Image({
+    x: 1835,
+    y: 10,
     image: rightPlantPng,
     widht: 85,
     height: 166,
@@ -166,11 +186,21 @@ export class Graphics {
     x: 1400,
     y: 700,
     image: brokenPlatePng,
-    widht: 94,
-    height: 80,
+    widht: 67,
+    height: 57,
+  });
+
+  private barPlate: KonvaImage = new KonvaImage({
+    x: 478,
+    y: 190,
+    image: barPlatePng,
+    width: 59,
+    height: 43,
   });
 
   private plates: KonvaImage[] = [];
+
+  private glasses: KonvaImage[] = [];
 
   private interval: NodeJS.Timer | undefined;
 
@@ -239,6 +269,19 @@ export class Graphics {
     }
   }
 
+  setGlasses() {
+    for (const glass of Glasses) {
+      const konvaImage = new Konva.Image({
+        x: glass.position.x,
+        y: glass.position.y,
+        image: glass.image,
+        widht: glass.size.width,
+        height: glass.size.height,
+      });
+      this.glasses.push(konvaImage);
+    }
+  }
+
   setTopLayer() {
     this.topTablesLayer.add(this.table1);
     this.topTablesLayer.add(this.table2);
@@ -250,15 +293,19 @@ export class Graphics {
   }
 
   setBottomPlantsLayer() {
-    this.bottomPlantsLayer.add(this.leftPlant);
-    this.bottomPlantsLayer.add(this.rightPlant);
+    this.bottomPlantsLayer.add(this.bottomLeftPlant);
+    this.bottomPlantsLayer.add(this.bottomRightPlant);
   }
 
   setBackgroundLayer() {
     this.backgroundLayer.add(this.restaurant);
     this.backgroundLayer.add(this.bartender);
     this.backgroundLayer.add(this.bar);
+    this.backgroundLayer.add(this.barPlate);
+    this.backgroundLayer.add(this.glasses[0]);
     this.backgroundLayer.add(this.plates[1]);
+    this.backgroundLayer.add(this.topLeftPlant);
+    this.backgroundLayer.add(this.topRightPlant);
   }
 
   setCharacterLayer() {
@@ -267,6 +314,7 @@ export class Graphics {
 
   setAssetsLayers() {
     this.setPlates();
+    this.setGlasses();
     this.setBackgroundLayer();
     this.setTopLayer();
     this.setCharacterLayer();
@@ -356,14 +404,29 @@ export class Graphics {
     this.plates[index].moveToTop();
   }
 
+  renderGlass(index: number) {
+    this.backgroundLayer.add(this.glasses[index]);
+    this.glasses[index].moveToTop();
+  }
+
   hidePlate(index: number) {
     this.plates[index].remove();
+  }
+
+  hideGlass(index: number) {
+    this.glasses[index].remove();
   }
 
   showPlateOnTable(index: number, table: Position) {
     this.bottomTablesLayer.add(this.plates[index]);
     this.plates[index].setAttrs(table);
     this.plates[index].show();
+  }
+
+  showGlassOnTable(index: number, table: Position) {
+    this.topTablesLayer.add(this.glasses[index]);
+    this.glasses[index].setAttrs(table);
+    this.glasses[index].show();
   }
 
   renderBrokenPlate() {
@@ -398,6 +461,7 @@ export class Graphics {
     this.stopCleaningAnimation();
     this.stage.removeChildren();
     this.plates = [];
+    this.glasses = [];
     clearInterval(this.interval);
   }
 }

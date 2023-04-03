@@ -1,11 +1,11 @@
 import { Physics } from '../physics';
-import { Plate, Plates } from '../physical/plate';
 import { Character } from '../physical/character';
 import { Graphics } from '../graphics/graphics';
+import { Glass, Glasses } from '../physical/glass';
 
-export class PlateInteractions {
-  private plates: Plate[] = Plates;
-  private serving: number = 1;
+export class GlassInteractions {
+  private glasses: Glass[] = Glasses;
+  private serving: number = 0;
 
   public served = 0;
   constructor(
@@ -16,49 +16,49 @@ export class PlateInteractions {
 
   play(): void {
     if (this.character.holding) {
-      this.servePlate(this.serving);
-      this.served++;
+      this.serveGlass(this.serving);
     } else {
-      this.holdPlate(this.serving);
+      this.holdGlass(this.serving);
     }
   }
 
-  holdPlate(index: number) {
-    if (!this.plates[index]) return;
+  holdGlass(index: number) {
+    if (!this.glasses[index]) return;
     const { distanceX, distanceY } = this.physics.getDistancesXY(
       this.character.getCenter(),
-      this.plates[index].getCenter(),
+      this.glasses[index].getCenter(),
     );
     if (distanceX > 30 || distanceX < -30) return;
     if (distanceY > 35) return;
-    this.graphics.hidePlate(index);
+    this.graphics.hideGlass(index);
     this.character.reverseHolding();
   }
 
-  servePlate(index: number) {
-    if (!this.plates[index]) return;
+  serveGlass(index: number) {
+    if (!this.glasses[index]) return;
     const { distanceX, distanceY } = this.physics.getDistancesXY(
       this.character.getCenter(),
-      this.plates[index].destination,
+      this.glasses[index].destination,
     );
     if (distanceX > 100 || distanceX < 0) return;
     if (distanceY < -100 || distanceY > 60) return;
 
-    this.graphics.showPlateOnTable(index, this.plates[index].destination);
+    this.graphics.showGlassOnTable(index, this.glasses[index].destination);
+    this.served++;
     this.character.reverseHolding();
-    this.newPlate();
+    this.newGlass();
   }
 
-  newPlate() {
+  newGlass() {
     this.serving += 1;
-    if (this.serving >= this.plates.length) {
-      this.graphics.renderPlate(0);
+    if (this.serving >= this.glasses.length) {
       return;
     }
-    this.graphics.renderPlate(this.serving);
+    this.graphics.renderGlass(this.serving);
   }
 
   reset() {
-    this.serving = 1;
+    this.serving = 0;
+    this.served = 0;
   }
 }

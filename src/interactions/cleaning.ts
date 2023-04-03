@@ -42,4 +42,8 @@ export class CleaningInteraction {
       this.timeout = undefined;
     }
   }
+
+  reset() {
+    this.cleaned = false;
+  }
 }

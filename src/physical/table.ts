@@ -43,30 +43,34 @@ export class TableBuilder {
   }
 }
 
-const table1 = new Table(
-  { x: 350, y: 450 },
-  { width: 380, height: 30 },
-  'table1',
-);
+const table1 = new TableBuilder()
+  .named('table1')
+  .at({ x: 350, y: 450 })
+  .sized({ width: 380, height: 30 })
+  .build();
 
-const table2 = new Table(
-  { x: 1350, y: 450 },
-  { width: 380, height: 30 },
-  'table2',
-);
+const table2 = new TableBuilder()
+  .named('table2')
+  .at({ x: 1350, y: 450 })
+  .sized({ width: 380, height: 30 })
+  .build();
 
-const table3 = new Table(
-  { x: 160, y: 800 },
-  { width: 400, height: 30 },
-  'table3',
-);
+const table3 = new TableBuilder()
+  .named('table3')
+  .at({ x: 160, y: 800 })
+  .sized({ width: 400, height: 30 })
+  .build();
 
-const table4 = new Table(
-  { x: 1220, y: 820 },
-  { width: 400, height: 10 },
-  'table4',
-);
+const table4 = new TableBuilder()
+  .named('table4')
+  .at({ x: 1220, y: 820 })
+  .sized({ width: 400, height: 10 })
+  .build();
 
-const bar = new Table({ x: 150, y: 100 }, { width: 600, height: 40 }, 'bar');
+const bar = new TableBuilder()
+  .named('bar')
+  .at({ x: 150, y: 100 })
+  .sized({ width: 600, height: 40 })
+  .build();
 
 export const Tables = [table1, table2, table3, table4, bar];

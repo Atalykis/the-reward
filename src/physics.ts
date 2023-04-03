@@ -78,10 +78,10 @@ export class Physics {
   canMove(to: Position) {
     if (!this.character) return;
     const isCharacterInsideOfStage =
-      to.x < this.stageSize.width - this.character.size.width &&
-      to.x > 0 &&
+      to.x < this.stageSize.width - this.character.size.width * 1.5 &&
+      to.x > -this.character.size.width / 2 &&
       to.y < this.stageSize.height - this.character.size.height &&
-      to.y > 0;
+      to.y > -20;
 
     if (!isCharacterInsideOfStage) return false;
 
