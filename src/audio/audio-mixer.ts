@@ -6,12 +6,16 @@ export class AudioMixer {
   private sounds: Map<string, Sound> = new Map();
   private gameOverSounds: Map<string, Sound> = new Map();
   private bossSounds: Map<string, Sound> = new Map();
+
+  private soundEffects: Map<string, Sound> = new Map();
   private bossSoundPlaying: boolean = false;
   private currentBossSound: number = 0;
+
   constructor(private readonly physics: Physics) {
     this.initSounds();
     this.initGameOverSounds();
     this.initBossSounds();
+    this.initSoundEffects();
   }
 
   async createSoundFromSrc(
@@ -80,6 +84,14 @@ export class AudioMixer {
     );
   }
 
+  async initSoundEffects() {
+    this.createSoundFromSrc(
+      'sounds/plate-break.mp3',
+      'breaking',
+      this.soundEffects,
+    );
+  }
+
   async initBossSounds() {
     this.createSoundFromSrc('sounds/boss/1.mp3', '1', this.bossSounds);
     this.createSoundFromSrc('sounds/boss/2.mp3', '2', this.bossSounds);
@@ -115,6 +127,12 @@ export class AudioMixer {
     for (const sound of this.sounds.values()) {
       sound.stop();
     }
+  }
+
+  playEffect(name: string) {
+    const soundEffect = this.soundEffects.get(name);
+    if (!soundEffect) return;
+    soundEffect.play();
   }
 
   manageTablesSounds() {

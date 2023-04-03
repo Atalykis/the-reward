@@ -65,8 +65,11 @@ export class Run {
       dirtCleaned: 0,
     };
     this.displayObjective();
-    setTimeout(() => this.initAudio(), 3000);
-    setTimeout(() => this.cleaningInteraction.brokenPlateAppearance(), 6000);
+    setTimeout(() => this.initAudio(), 2000);
+    setTimeout(() => {
+      this.cleaningInteraction.brokenPlateAppearance();
+      this.audioMixer.playEffect('breaking');
+    }, 15000);
     setTimeout(() => this.gameOver(), 63000);
   }
 
