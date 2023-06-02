@@ -1,3 +1,5 @@
+import { Holding } from '../physical/character';
+
 export class MovementAnimation {
   private movementAnimationIntervals: Map<string, NodeJS.Timer> = new Map();
   private previousFrame: string = '2';
@@ -5,7 +7,7 @@ export class MovementAnimation {
   private lastDirection: string = '';
   constructor(private character: HTMLImageElement) {}
 
-  play(to: string, holding: boolean) {
+  play(to: string, holding: Holding) {
     const interval = this.movementAnimationIntervals.get(to);
     if (interval && this.lastDirection === to) return;
     clearInterval(this.movementAnimationIntervals.get(this.lastDirection));
@@ -17,10 +19,10 @@ export class MovementAnimation {
     );
   }
 
-  nextFrame(to: string, holding: boolean) {
+  nextFrame(to: string, holding: Holding) {
     let frameType: string;
     if (holding) {
-      frameType = 'moving-plate';
+      frameType = `moving-${holding}`;
     } else {
       frameType = 'moving';
     }
@@ -66,7 +68,7 @@ export class MovementAnimation {
   }
 }
 
-export class BasicAnimation {
+export class TwoFramesAnimation {
   private animationInterval: NodeJS.Timer | undefined;
   private currentFrame: string = '0';
 

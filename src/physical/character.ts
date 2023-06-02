@@ -1,5 +1,9 @@
 import type { Position, Size } from '../physics';
 
+export type Holding = false | HeldObject;
+
+export type HeldObject = 'plate' | 'glass';
+
 export class Character {
   public position: Position = {
     x: 1170,
@@ -15,7 +19,7 @@ export class Character {
 
   public angle: number = 0;
 
-  public holding: boolean = false;
+  public holding: Holding = false;
 
   constructor() {}
 
@@ -52,7 +56,11 @@ export class Character {
     };
   }
 
-  reverseHolding() {
-    this.holding = !this.holding;
+  hold(object: HeldObject) {
+    this.holding = object;
+  }
+
+  emptyHand() {
+    this.holding = false;
   }
 }

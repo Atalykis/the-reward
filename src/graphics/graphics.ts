@@ -3,7 +3,7 @@ import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
 import { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from '../physics';
-import { BasicAnimation, MovementAnimation } from './animations';
+import { TwoFramesAnimation, MovementAnimation } from './animations';
 import { Plates } from '../physical/plate';
 import { Glasses } from '../physical/glass';
 
@@ -206,49 +206,49 @@ export class Graphics {
 
   private movementAnimation = new MovementAnimation(characterPng);
 
-  private gameOverAnimation = new BasicAnimation(
+  private gameOverAnimation = new TwoFramesAnimation(
     '/assets/game-over/',
     gameOverPng,
     200,
   );
 
-  private mainMenuAnimation = new BasicAnimation(
+  private mainMenuAnimation = new TwoFramesAnimation(
     '/assets/main-menu/',
     mainMenuPng,
     300,
   );
 
-  private cleaningAnimation = new BasicAnimation(
+  private cleaningAnimation = new TwoFramesAnimation(
     '/assets/waiter/cleaning/',
     characterPng,
     300,
   );
 
-  private table1Animation = new BasicAnimation(
+  private table1Animation = new TwoFramesAnimation(
     '/assets/restaurant/table1/',
     table1Png,
     500,
   );
 
-  private table2Animation = new BasicAnimation(
+  private table2Animation = new TwoFramesAnimation(
     '/assets/restaurant/table2/',
     table2Png,
     500,
   );
 
-  private table3Animation = new BasicAnimation(
+  private table3Animation = new TwoFramesAnimation(
     '/assets/restaurant/table3/',
     table3Png,
     500,
   );
 
-  private table4Animation = new BasicAnimation(
+  private table4Animation = new TwoFramesAnimation(
     '/assets/restaurant/table4/',
     table4Png,
     500,
   );
 
-  private bartenderAnimation = new BasicAnimation(
+  private bartenderAnimation = new TwoFramesAnimation(
     '/assets/restaurant/bar/',
     bartenderPng,
     500,

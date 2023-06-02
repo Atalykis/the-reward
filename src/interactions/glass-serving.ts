@@ -31,7 +31,7 @@ export class GlassInteractions {
     if (distanceX > 30 || distanceX < -30) return;
     if (distanceY > 35) return;
     this.graphics.hideGlass(index);
-    this.character.reverseHolding();
+    this.character.hold('glass');
   }
 
   serveGlass(index: number) {
@@ -45,7 +45,7 @@ export class GlassInteractions {
 
     this.graphics.showGlassOnTable(index, this.glasses[index].destination);
     this.served++;
-    this.character.reverseHolding();
+    this.character.emptyHand();
     this.newGlass();
   }
 
