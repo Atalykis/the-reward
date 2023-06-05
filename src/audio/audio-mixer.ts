@@ -132,6 +132,7 @@ export class AudioMixer {
   playEffect(name: string) {
     const soundEffect = this.soundEffects.get(name);
     if (!soundEffect) return;
+    soundEffect.changeGain(0.1);
     soundEffect.play();
   }
 

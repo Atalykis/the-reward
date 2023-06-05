@@ -3,9 +3,11 @@ import type { Stage } from 'konva/lib/Stage';
 import type { Layer } from 'konva/lib/Layer';
 import { Image as KonvaImage } from 'konva/lib/shapes/Image';
 import type { Physics, Position } from '../physics';
-import { TwoFramesAnimation, MovementAnimation } from './animations';
+import { MovementAnimation } from './animation/mouvement-animation';
+import { TwoFramesAnimation } from './animation/two-frames-animation';
 import { Plates } from '../physical/plate';
 import { Glasses } from '../physical/glass';
+import { FourFramesAnimation } from './animation/four-frames-animation';
 
 const mainMenuPng = new Image(1920, 1080);
 mainMenuPng.src = '/assets/main-menu/0.png';
@@ -212,10 +214,10 @@ export class Graphics {
     200,
   );
 
-  private mainMenuAnimation = new TwoFramesAnimation(
+  private mainMenuAnimation = new FourFramesAnimation(
     '/assets/main-menu/',
     mainMenuPng,
-    300,
+    500,
   );
 
   private cleaningAnimation = new TwoFramesAnimation(
