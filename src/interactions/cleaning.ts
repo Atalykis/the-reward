@@ -3,10 +3,10 @@ import { Graphics } from '../graphics/graphics';
 import { Physics } from '../physics';
 
 export class CleaningInteraction {
-  private interactable: boolean = false;
+  private interactable: number = 0;
   private timeout: NodeJS.Timeout | undefined;
 
-  public cleaned = false;
+  public cleaned = 0;
   constructor(
     private graphics: Graphics,
     private physics: Physics,
@@ -15,13 +15,24 @@ export class CleaningInteraction {
 
   brokenPlateAppearance() {
     this.graphics.renderBrokenPlate();
-    this.interactable = true;
+    this.interactable++;
+  }
+
+  brokenGlassAppearance() {
+    this.graphics.renderBrokenGlass();
+    this.interactable++;
   }
 
   brokenPlateCleaned() {
     this.graphics.hideBrokenPlate();
-    this.cleaned = true;
-    this.interactable = false;
+    this.cleaned++;
+    this.interactable--;
+  }
+
+  brokenGlassCleaned() {
+    this.graphics.hideBrokenGlass();
+    this.cleaned++;
+    this.interactable--;
   }
 
   play() {
@@ -31,6 +42,12 @@ export class CleaningInteraction {
       this.graphics.renderCleaningAnimation();
       if (!this.timeout) {
         this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
+      }
+    }
+    if (this.physics.isCharacterOnBrokenGlass()) {
+      this.graphics.renderCleaningAnimation();
+      if (!this.timeout) {
+        this.timeout = setTimeout(() => this.brokenGlassCleaned(), 5000);
       }
     }
   }
@@ -44,6 +61,7 @@ export class CleaningInteraction {
   }
 
   reset() {
-    this.cleaned = false;
+    this.cleaned = 0;
+    this.interactable = 0;
   }
 }

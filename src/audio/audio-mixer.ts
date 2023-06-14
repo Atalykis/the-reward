@@ -87,7 +87,13 @@ export class AudioMixer {
   async initSoundEffects() {
     this.createSoundFromSrc(
       'sounds/plate-break.mp3',
-      'breaking',
+      'plate-break',
+      this.soundEffects,
+    );
+
+    this.createSoundFromSrc(
+      'sounds/glass-break.mp3',
+      'glass-break',
       this.soundEffects,
     );
   }
@@ -132,7 +138,7 @@ export class AudioMixer {
   playEffect(name: string) {
     const soundEffect = this.soundEffects.get(name);
     if (!soundEffect) return;
-    soundEffect.changeGain(0.1);
+    soundEffect.changeGain(0.2);
     soundEffect.play();
   }
 

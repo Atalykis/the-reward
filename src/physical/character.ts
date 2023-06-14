@@ -15,7 +15,7 @@ export class Character {
   };
   public speed: number = 0;
 
-  public baseSpeed: number = 8;
+  public baseSpeed: number = 7.5;
 
   public angle: number = 0;
 

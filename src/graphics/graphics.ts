@@ -30,6 +30,9 @@ rightPlantPng.src = '/assets/restaurant/rightPlant.png';
 const brokenPlatePng = new Image(67, 57);
 brokenPlatePng.src = '/assets/plates/broken-plate.png';
 
+const brokenGlassPng = new Image(80, 80);
+brokenGlassPng.src = '/assets/glasses/broken-glass.png';
+
 const table1Png = new Image(473, 243);
 table1Png.src = '/assets/restaurant/table1/0.png';
 
@@ -190,6 +193,14 @@ export class Graphics {
     image: brokenPlatePng,
     widht: 67,
     height: 57,
+  });
+
+  private brokenGlass: KonvaImage = new Konva.Image({
+    x: 350,
+    y: 260,
+    image: brokenGlassPng,
+    widht: 80,
+    height: 80,
   });
 
   private barPlate: KonvaImage = new KonvaImage({
@@ -437,6 +448,14 @@ export class Graphics {
 
   hideBrokenPlate() {
     this.brokenPlate.remove();
+  }
+
+  renderBrokenGlass() {
+    this.backgroundLayer.add(this.brokenGlass);
+  }
+
+  hideBrokenGlass() {
+    this.brokenGlass.remove();
   }
 
   renderCleaningAnimation() {

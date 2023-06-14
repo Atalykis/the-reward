@@ -68,8 +68,12 @@ export class Run {
     setTimeout(() => this.initAudio(), 2000);
     setTimeout(() => {
       this.cleaningInteraction.brokenPlateAppearance();
-      this.audioMixer.playEffect('breaking');
+      this.audioMixer.playEffect('plate-break');
     }, 15000);
+    setTimeout(() => {
+      this.cleaningInteraction.brokenGlassAppearance();
+      this.audioMixer.playEffect('glass-break');
+    }, 45000);
     setTimeout(() => this.gameOver(), 63000);
   }
 
@@ -117,7 +121,7 @@ export class Run {
     this.audioMixer.manageTablesSounds();
     this.audioMixer.manageBossSentence();
     this.playerObjective.plateServed = this.plateInteraction.served;
-    this.playerObjective.dirtCleaned = this.cleaningInteraction.cleaned ? 1 : 0;
+    this.playerObjective.dirtCleaned = this.cleaningInteraction.cleaned;
     this.playerObjective.glassServed = this.glassInteraction.served;
     this.displayObjective();
   }

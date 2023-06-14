@@ -145,4 +145,14 @@ export class Physics {
     if (distance > 130 && distance < 200) return true;
     return false;
   }
+
+  isCharacterOnBrokenGlass() {
+    const distance = this.getDistance(this.character!.position, {
+      x: 350,
+      y: 260,
+    });
+
+    if (distance > 130 && distance < 200) return true;
+    return false;
+  }
 }
