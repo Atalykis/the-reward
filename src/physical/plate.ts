@@ -7,6 +7,7 @@ export class Plate implements Physical {
     public position: Position,
     public size: Size,
     public destination: Position,
+    public dish: string,
     src: string,
   ) {
     this.image.src = src;
@@ -18,12 +19,18 @@ export class Plate implements Physical {
       y: this.position.y + this.size.height / 2,
     };
   }
+
+  showDish(): void {
+    this.image.src = `/assets/plates/${this.dish}.png`;
+  }
 }
 
 export class PlateBuilder {
   private position: Position = { x: 0, y: 0 };
   private size: Size = { width: 0, height: 0 };
   private destination: Position = { x: 0, y: 0 };
+
+  private dish: string = '';
   private src: string = '';
 
   constructor() {}
@@ -48,8 +55,19 @@ export class PlateBuilder {
     return this;
   }
 
+  filledWith(dish: string) {
+    this.dish = dish;
+    return this;
+  }
+
   build() {
-    return new Plate(this.position, this.size, this.destination, this.src);
+    return new Plate(
+      this.position,
+      this.size,
+      this.destination,
+      this.dish,
+      this.src,
+    );
   }
 }
 
@@ -62,16 +80,18 @@ const plate0 = new PlateBuilder()
 
 const plate1 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 430, y: 785 })
+  .deliverTo({ x: 430, y: 800 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
+  .filledWith('omelette')
   .build();
 
 const plate2 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 330, y: 785 })
+  .deliverTo({ x: 330, y: 800 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
+  .filledWith('bouchee')
   .build();
 
 const plate3 = new PlateBuilder()
@@ -79,6 +99,7 @@ const plate3 = new PlateBuilder()
   .deliverTo({ x: 330, y: 850 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
+  .filledWith('poisson')
   .build();
 
 const plate4 = new PlateBuilder()
@@ -86,6 +107,7 @@ const plate4 = new PlateBuilder()
   .deliverTo({ x: 430, y: 850 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
+  .filledWith('poulet')
   .build();
 
 export const Plates = [plate0, plate1, plate2, plate3, plate4];

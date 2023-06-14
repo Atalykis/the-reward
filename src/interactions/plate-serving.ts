@@ -43,6 +43,7 @@ export class PlateInteractions {
     if (distanceX > 100 || distanceX < 0) return;
     if (distanceY < -100 || distanceY > 60) return;
 
+    this.plates[index].showDish();
     this.graphics.showPlateOnTable(index, this.plates[index].destination);
     this.served++;
     this.character.emptyHand();

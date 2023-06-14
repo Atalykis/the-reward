@@ -6,8 +6,8 @@ export type HeldObject = 'plate' | 'glass';
 
 export class Character {
   public position: Position = {
-    x: 1170,
-    y: 50,
+    x: 1000,
+    y: 500,
   };
   public size: Size = {
     width: 100,
@@ -51,8 +51,8 @@ export class Character {
 
   resetPosition() {
     this.position = {
-      x: 1170,
-      y: 50,
+      x: 925,
+      y: 540,
     };
   }
 
