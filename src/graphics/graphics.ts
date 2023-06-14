@@ -458,8 +458,15 @@ export class Graphics {
     this.mainMenuLayer.removeChildren();
   }
 
+  resetPlates() {
+    for (const plate of Plates) {
+      plate.reset();
+    }
+  }
+
   clear() {
     this.resetLayers();
+    this.resetPlates();
     this.stopCleaningAnimation();
     this.stage.removeChildren();
     this.plates = [];

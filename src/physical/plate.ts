@@ -23,6 +23,10 @@ export class Plate implements Physical {
   showDish(): void {
     this.image.src = `/assets/plates/${this.dish}.png`;
   }
+
+  reset() {
+    this.image.src = '/assets/plates/plate.png';
+  }
 }
 
 export class PlateBuilder {
@@ -80,7 +84,7 @@ const plate0 = new PlateBuilder()
 
 const plate1 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 430, y: 800 })
+  .deliverTo({ x: 445, y: 800 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
   .filledWith('omelette')
@@ -88,7 +92,7 @@ const plate1 = new PlateBuilder()
 
 const plate2 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 330, y: 800 })
+  .deliverTo({ x: 325, y: 800 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
   .filledWith('bouchee')
@@ -96,7 +100,7 @@ const plate2 = new PlateBuilder()
 
 const plate3 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 330, y: 850 })
+  .deliverTo({ x: 325, y: 860 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
   .filledWith('poisson')
@@ -104,7 +108,7 @@ const plate3 = new PlateBuilder()
 
 const plate4 = new PlateBuilder()
   .at({ x: 1165, y: 40 })
-  .deliverTo({ x: 430, y: 850 })
+  .deliverTo({ x: 440, y: 860 })
   .sized({ width: 60, height: 54 })
   .withSrc('/assets/plates/plate.png')
   .filledWith('poulet')
