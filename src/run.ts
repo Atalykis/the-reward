@@ -27,7 +27,11 @@ export class Run {
     dirtCleaned: 0,
   };
   private audioMixer: AudioMixer;
-  constructor(private graphics: Graphics, private physics: Physics) {
+  private menuTimeout: NodeJS.Timeout | undefined;
+  constructor(
+    private graphics: Graphics,
+    private physics: Physics, // private switchMode: (mode: string) => void,
+  ) {
     this.audioMixer = new AudioMixer(this.physics);
     this.physics.setCharacter(this.character);
     this.plateInteraction = new PlateInteractions(
@@ -53,6 +57,7 @@ export class Run {
   }
 
   loop() {
+    this.menuTimeout = setTimeout(() => this.backToMenu(), 40000);
     this.audioMixer = new AudioMixer(this.physics);
     this.graphics.renderRestaurant();
     this.plateInteraction.reset();
@@ -73,6 +78,7 @@ export class Run {
     setTimeout(() => {
       this.cleaningInteraction.brokenGlassAppearance();
       this.audioMixer.playEffect('glass-break');
+      this.audioMixer.playEffect('boss-yell');
     }, 45000);
     setTimeout(() => this.gameOver(), 63000);
   }
@@ -100,8 +106,8 @@ export class Run {
     this.audioMixer.playAmbiance();
   }
 
-  clearLoop() {
-    clearInterval(this.interval);
+  backToMenu() {
+    location.reload();
   }
 
   tick(inputs: GamepadAnalogicInputs) {
@@ -112,6 +118,8 @@ export class Run {
       this.cancelCleaningInteraction();
     }
     if (inputs.movement.intensity > 0) {
+      clearTimeout(this.menuTimeout);
+      this.menuTimeout = undefined;
       this.cancelCleaningInteraction();
       const direction = this.translateAngleToDirection(inputs.movement.angle);
       this.graphics.renderMovementAnimation(direction);

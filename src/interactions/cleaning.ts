@@ -41,13 +41,13 @@ export class CleaningInteraction {
     if (this.physics.isCharacterOnBrokenPlate()) {
       this.graphics.renderCleaningAnimation();
       if (!this.timeout) {
-        this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5000);
+        this.timeout = setTimeout(() => this.brokenPlateCleaned(), 5500);
       }
     }
     if (this.physics.isCharacterOnBrokenGlass()) {
       this.graphics.renderCleaningAnimation();
       if (!this.timeout) {
-        this.timeout = setTimeout(() => this.brokenGlassCleaned(), 5000);
+        this.timeout = setTimeout(() => this.brokenGlassCleaned(), 5500);
       }
     }
   }

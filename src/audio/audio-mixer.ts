@@ -96,6 +96,12 @@ export class AudioMixer {
       'glass-break',
       this.soundEffects,
     );
+
+    this.createSoundFromSrc(
+      'sounds/boss-yell.mp3',
+      'boss-yell',
+      this.soundEffects,
+    );
   }
 
   async initBossSounds() {
