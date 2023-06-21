@@ -365,6 +365,7 @@ export class Graphics {
     this.characterLayer.draw();
     this.bottomTablesLayer.draw();
     this.bottomPlantsLayer.draw();
+    characterPng.src = '/assets/waiter/stopped/front.png';
     this.table1Animation.play();
     this.table2Animation.play();
     this.table3Animation.play();

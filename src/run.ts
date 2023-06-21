@@ -28,10 +28,8 @@ export class Run {
   };
   private audioMixer: AudioMixer;
   private menuTimeout: NodeJS.Timeout | undefined;
-  constructor(
-    private graphics: Graphics,
-    private physics: Physics, // private switchMode: (mode: string) => void,
-  ) {
+  private playing: boolean = true;
+  constructor(private graphics: Graphics, private physics: Physics) {
     this.audioMixer = new AudioMixer(this.physics);
     this.physics.setCharacter(this.character);
     this.plateInteraction = new PlateInteractions(
@@ -57,6 +55,7 @@ export class Run {
   }
 
   loop() {
+    this.playing = true;
     this.menuTimeout = setTimeout(() => this.backToMenu(), 40000);
     this.audioMixer = new AudioMixer(this.physics);
     this.graphics.renderRestaurant();
@@ -84,6 +83,7 @@ export class Run {
   }
 
   gameOver() {
+    this.playing = false;
     this.audioMixer.stopAllAmbiant();
     this.graphics.renderGameOver();
     const totalObjectiveDone =
@@ -111,6 +111,7 @@ export class Run {
   }
 
   tick(inputs: GamepadAnalogicInputs) {
+    if (!this.playing) return;
     this.physics.tick(inputs.movement);
     if (inputs.action.triggered) {
       this.playInteractions();
